@@ -22,7 +22,14 @@ fetch('./assets/config/config.json')
             console.log("[open] Connection established");
         };
         socket.onmessage = function (event) {
-            console.log(`[message] Data received from server: ${event.data}`);
+            try {
+                var res = JSON.parse(event.data);
+                $("#x_speed").html(res.X_speed);
+                $("#z_speed").html(res.Z_speed);
+            }
+            catch (e) {
+                console.log(e);
+            }
         };
         socket.onclose = function (event) {
             if (event.wasClean) {

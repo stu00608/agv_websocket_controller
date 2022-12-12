@@ -56,3 +56,13 @@ body {
     /* left:80% */
     right: 0%;
 }
+
+.display-panel {
+    position: absolute;
+    top: 50%;
+    right: 35%;
+    width: 300px;
+    height: 400px;
+    justify-content: center;
+    align-items: center;
+}
