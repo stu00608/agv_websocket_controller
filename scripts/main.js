@@ -57,6 +57,7 @@ function leftJoystickMove(event, nipple) {
 function leftJoystickEnd(event, nipple) {
     if (left_timer) clearInterval(left_timer);
     linear_x = 0;
+    transmitVelocity(linear_x, angular_z);
 }
 
 function rightJoystickStart(event, nipple) {
@@ -72,6 +73,7 @@ function rightJoystickMove(event, nipple) {
 function rightJoystickEnd(event, nipple) {
     if (right_timer) clearInterval(right_timer);
     angular_z = 0;
+    transmitVelocity(linear_x, angular_z);
 }
 
 function initJoystick() {
