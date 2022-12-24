@@ -1,3 +1,7 @@
+:root {
+    --bs-secondary: #1b4965;
+}
+
 html,
 body {
     touch-action: none;
@@ -28,6 +32,9 @@ body {
     height: 740px;
     width: 1080px;
     background-color: #eaf2ef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .right {
@@ -58,11 +65,24 @@ body {
 }
 
 .display-panel {
-    position: absolute;
-    top: 50%;
-    right: 35%;
-    width: 300px;
+    width: 600px;
     height: 400px;
     justify-content: center;
     align-items: center;
+    text-align: center;
+    padding: 30px;
+    border: 1px solid #ccc;
+}
+
+.display-panel p {
+    display: inline-block;
+    text-align: center;
+}
+
+input[type="range"][disabled]::-webkit-slider-thumb {
+    background-color: var(--bs-secondary);
+}
+
+input[type="range"][disabled]::-moz-range-thumb {
+    background-color: var(--bs-secondary);
 }

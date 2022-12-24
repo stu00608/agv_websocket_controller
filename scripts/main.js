@@ -8,8 +8,8 @@ var linear_x = 0;
 var angular_z = 0;
 
 const JOYSTICK_SIZE = 150;
-const MAX_LINEAR_VALUE = 1.0;
-const MAX_ROTATE_VALUE = 1.0;
+const MAX_LINEAR_VALUE = 0.75;
+const MAX_ROTATE_VALUE = 0.75;
 
 var socket = null;
 var config = null;
@@ -24,8 +24,8 @@ fetch('./assets/config/config.json')
         socket.onmessage = function (event) {
             try {
                 var res = JSON.parse(event.data);
-                $("#x_speed").html(res.X_speed);
-                $("#z_speed").html(res.Z_speed);
+                updateRangeInput(document.getElementById('leftVelRange'), res.left_motor_speed);
+                updateRangeInput(document.getElementById('rightVelRange'), res.right_motor_speed);
             }
             catch (e) {
                 console.log(e);
@@ -74,7 +74,7 @@ function rightJoystickStart(event, nipple) {
 }
 
 function rightJoystickMove(event, nipple) {
-    angular_z = Math.cos(nipple.angle.radian) * MAX_ROTATE_VALUE * nipple.distance / (JOYSTICK_SIZE / 2);
+    angular_z = -Math.cos(nipple.angle.radian) * MAX_ROTATE_VALUE * nipple.distance / (JOYSTICK_SIZE / 2);
 }
 
 function rightJoystickEnd(event, nipple) {
@@ -110,6 +110,23 @@ function initJoystick() {
     right_joystick.on("start", rightJoystickStart);
     right_joystick.on("move", rightJoystickMove);
     right_joystick.on("end", rightJoystickEnd);
+}
+
+function updateRangeInput(rangeInput, value) {
+    // Get the container element
+    var container = rangeInput.parentElement;
+
+    // Calculate the width of the container
+    var containerWidth = container.offsetWidth;
+
+    // Calculate the position of the range input based on the value
+    var inputPosition = ((value + 1) / 2) * containerWidth;
+
+    // Update the position of the range input
+    rangeInput.style.left = inputPosition + 'px';
+
+    // Update the value of the range input
+    rangeInput.value = value;
 }
 
 $(document).ready(function () {

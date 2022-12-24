@@ -7,6 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=no">
     <title>MNIST Canvas</title>
 
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta3/css/bootstrap.min.css"
+        integrity="sha512-N415hCJJdJx+1UBfULt+i+ihvOn42V/kOjOpp1UTh4CZ70Hx5bDlKryWaqEKfY/8EYOu/C2MuyaluJryK1Lb5Q=="
+        crossorigin="anonymous" />
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
@@ -14,15 +18,50 @@
 
     <div id="container">
         <div class="display-panel">
-            <p style="text-align: center; font-size: 32px;">X Speed</p>
-            <p style="text-align: center; font-size: 25px;" id="x_speed">None</p>
-            <p style="text-align: center; font-size: 32px;">Z Speed</p>
-            <p style="text-align: center; font-size: 25px;" id="z_speed">None</p>
-        </div>
-        <div class="js-panel" id="js-left"></div>
-        <div class="js-panel right" id="js-right"></div>
-    </div>
+            <div class="row m-2">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-2" style="display: flex;align-items: center; justify-content: left;">-1</div>
+                <div class="col-sm-4" style="display: flex;align-items: center; justify-content: center;">0</div>
+                <div class="col-sm-2" style="display: flex;align-items: center; justify-content: right;">1</div>
+            </div>
+            <div class="row m-2">
+                <div class="col-sm-4">
+                    <h3><small>Left Velocity</small></h3>
+                </div>
+                <div class="col-sm-8" style="display: flex;align-items: center; justify-content: center;">
+                    <input type="range" class="form-range" id="leftVelRange" min="-1" max="1" step="0.01" disabled>
+                </div>
+            </div>
+            <div class="row m-2">
+                <div class="col-sm-4">
+                    <h3><small>Right Velocity</small></h3>
+                </div>
+                <div class="col-sm-8" style="display: flex;align-items: center; justify-content: center;">
+                    <input type="range" class="form-range" id="rightVelRange" min="-1" max="1" step="0.01" disabled>
+                </div>
+            </div>
+            <!-- <div class="row" style="height: 30px;">
+            </div> -->
 
+            <div class="row m-5">
+                <div class="col-sm-4">
+                    <button type="button" class="btn btn-primary" style="width: 100px; height: 100px;">Action 1</button>
+                </div>
+                <div class="col-sm-4">
+                    <button type="button" class="btn btn-primary" style="width: 100px; height: 100px;">Action 2</button>
+                </div>
+                <div class="col-sm-4">
+                    <button type="button" class="btn btn-primary" style="width: 100px; height: 100px;">Action 3</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="js-panel" id="js-left"></div>
+    <div class="js-panel right" id="js-right"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta3/js/bootstrap.min.js"
+        integrity="sha512-mp3VeMpuFKbgxm/XMUU4QQUcJX4AZfV5esgX72JQr7H7zWusV6lLP1S78wZnX2z9dwvywil1VHkHZAqfGOW7Nw=="
+        crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/onnxjs/dist/onnx.min.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="assets/lib/nipplejs.js"></script>
