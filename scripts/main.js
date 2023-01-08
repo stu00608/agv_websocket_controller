@@ -8,8 +8,12 @@ var linear_x = 0;
 var angular_z = 0;
 
 const JOYSTICK_SIZE = 150;
-const MAX_LINEAR_VALUE = 0.75;
-const MAX_ROTATE_VALUE = 0.75;
+var max_linear_value = 0.75;
+var max_rotate_value = 0.75;
+
+// mode 1: Manual control mode. 
+// mode 2: Auto control mode.
+var control_mode = 1;
 
 var socket = null;
 var config = null;
@@ -24,8 +28,7 @@ fetch('./assets/config/config.json')
         socket.onmessage = function (event) {
             try {
                 var res = JSON.parse(event.data);
-                updateRangeInput(document.getElementById('leftVelRange'), res.left_motor_speed);
-                updateRangeInput(document.getElementById('rightVelRange'), res.right_motor_speed);
+                console.log(res);
             }
             catch (e) {
                 console.log(e);
@@ -46,9 +49,21 @@ fetch('./assets/config/config.json')
     })
     .catch(err => console.error(err));
 
+function wrapData(x, z, mode_2_round) {
+    return JSON.stringify({
+        mode: control_mode,
+        x: x,
+        z: z,
+        mode_2_round: mode_2_round
+    });
+}
+
 function transmitVelocity(x, z) {
-    const data = JSON.stringify({ x: x, z: z });
-    socket.send(data);
+    if (control_mode != 1) {
+        console.log("Wrong mode.")
+        return;
+    }
+    socket.send(wrapData(x, z, 0));
 }
 
 function leftJoystickStart(event, nipple) {
@@ -58,7 +73,7 @@ function leftJoystickStart(event, nipple) {
 }
 
 function leftJoystickMove(event, nipple) {
-    linear_x = Math.sin(nipple.angle.radian) * MAX_LINEAR_VALUE * nipple.distance / (JOYSTICK_SIZE / 2);
+    linear_x = Math.sin(nipple.angle.radian) * max_linear_value * nipple.distance / (JOYSTICK_SIZE / 2);
 }
 
 function leftJoystickEnd(event, nipple) {
@@ -74,7 +89,7 @@ function rightJoystickStart(event, nipple) {
 }
 
 function rightJoystickMove(event, nipple) {
-    angular_z = -Math.cos(nipple.angle.radian) * MAX_ROTATE_VALUE * nipple.distance / (JOYSTICK_SIZE / 2);
+    angular_z = -Math.cos(nipple.angle.radian) * max_rotate_value * nipple.distance / (JOYSTICK_SIZE / 2);
 }
 
 function rightJoystickEnd(event, nipple) {
@@ -112,24 +127,56 @@ function initJoystick() {
     right_joystick.on("end", rightJoystickEnd);
 }
 
-function updateRangeInput(rangeInput, value) {
-    // Get the container element
-    var container = rangeInput.parentElement;
+function updateMaxVelocityRangeValue() {
+    document.getElementById('maxVelocityRangeValue').innerHTML = document.getElementById('maxVelocityRange').value;
+    max_linear_value = document.getElementById('maxVelocityRange').value;
+    max_rotate_value = document.getElementById('maxVelocityRange').value;
+}
 
-    // Calculate the width of the container
-    var containerWidth = container.offsetWidth;
+function modeBtn1Callback() {
+    if (control_mode == 1) {
+        console.log("Already in manual mode.")
+        return;
+    }
+    control_mode = 1;
+    initJoystick();
+}
 
-    // Calculate the position of the range input based on the value
-    var inputPosition = ((value + 1) / 2) * containerWidth;
+function modeBtn2Callback() {
+    // show the modal with id audoModeModal
+    $('#autoModeModal').modal('show');
+    if (control_mode == 2) {
+        console.log("Already in auto mode.")
+        return;
+    }
+    control_mode = 2;
+    left_joystick.destroy();
+    right_joystick.destroy();
+}
 
-    // Update the position of the range input
-    rangeInput.style.left = inputPosition + 'px';
-
-    // Update the value of the range input
-    rangeInput.value = value;
+function sendAutoModeData() {
+    if (control_mode != 2) {
+        console.log("Wrong mode.")
+        return;
+    }
+    var round = document.getElementById('numberSelect').value;
+    socket.send(wrapData(0, 0, round));
+    $('#autoModeModal').modal('hide');
 }
 
 $(document).ready(function () {
     // JoySticks
     initJoystick();
+
+    // Range Event
+    updateMaxVelocityRangeValue();
+    document.getElementById('maxVelocityRange').addEventListener('input', updateMaxVelocityRangeValue);
+
+    // Button Event
+    document.getElementById('modeBtn1').addEventListener('click', modeBtn1Callback);
+    document.getElementById('modeBtn2').addEventListener('click', modeBtn2Callback);
+    $("#autoModeSubmitBtn").click(sendAutoModeData);
+
+    // Control Mode
+    control_mode = 1;
 });

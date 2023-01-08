@@ -20,44 +20,67 @@
         <div class="display-panel">
             <div class="row m-2">
                 <div class="col-sm-4"></div>
-                <div class="col-sm-2" style="display: flex;align-items: center; justify-content: left;">-1</div>
-                <div class="col-sm-4" style="display: flex;align-items: center; justify-content: center;">0</div>
+                <div class="col-sm-2" style="display: flex;align-items: center; justify-content: left;">0</div>
+                <div class="col-sm-3" style="display: flex;align-items: center; justify-content: center;">0.5</div>
                 <div class="col-sm-2" style="display: flex;align-items: center; justify-content: right;">1</div>
             </div>
             <div class="row m-2">
                 <div class="col-sm-4">
-                    <h3><small>Left Velocity</small></h3>
+                    <h3><small>Max Velocity</small></h3>
                 </div>
-                <div class="col-sm-8" style="display: flex;align-items: center; justify-content: center;">
-                    <input type="range" class="form-range" id="leftVelRange" min="-1" max="1" step="0.01" disabled>
+                <div class="col-sm-7" style="display: flex;align-items: center; justify-content: center;">
+                    <input type="range" class="form-range" id="maxVelocityRange" value="0.5" min="0" max="1" step="0.1">
                 </div>
-            </div>
-            <div class="row m-2">
-                <div class="col-sm-4">
-                    <h3><small>Right Velocity</small></h3>
-                </div>
-                <div class="col-sm-8" style="display: flex;align-items: center; justify-content: center;">
-                    <input type="range" class="form-range" id="rightVelRange" min="-1" max="1" step="0.01" disabled>
+                <div class="col-sm-1" style="display: flex;align-items: center; justify-content: center;">
+                    <label for="maxVelocityRange"><span id="maxVelocityRangeValue"></span></label>
                 </div>
             </div>
-            <!-- <div class="row" style="height: 30px;">
-            </div> -->
-
             <div class="row m-5">
                 <div class="col-sm-4">
-                    <button type="button" class="btn btn-primary" style="width: 100px; height: 100px;">Action 1</button>
+                    <button type="button" id="modeBtn1" class="btn btn-primary"
+                        style="width: 100px; height: 100px;">Manual</button>
                 </div>
                 <div class="col-sm-4">
-                    <button type="button" class="btn btn-primary" style="width: 100px; height: 100px;">Action 2</button>
+                    <button type="button" id="modeBtn2" class="btn btn-primary"
+                        style="width: 100px; height: 100px;">Auto</button>
                 </div>
                 <div class="col-sm-4">
-                    <button type="button" class="btn btn-primary" style="width: 100px; height: 100px;">Action 3</button>
+                    <button type="button" id="modeBtn3" class="btn btn-primary"
+                        style="width: 100px; height: 100px;">Action 3</button>
                 </div>
             </div>
         </div>
     </div>
     <div class="js-panel" id="js-left"></div>
     <div class="js-panel right" id="js-right"></div>
+    <!-- A div area to show a bootstrap modal and show a dropdown list to selet from 0 ~ 10. -->
+    <div class="modal fade" id="autoModeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Select a number</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex justify-content-center">
+                    <select class="form-select" aria-label="Default select example" id="numberSelect">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="autoModeSubmitBtn">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta3/js/bootstrap.min.js"
         integrity="sha512-mp3VeMpuFKbgxm/XMUU4QQUcJX4AZfV5esgX72JQr7H7zWusV6lLP1S78wZnX2z9dwvywil1VHkHZAqfGOW7Nw=="
