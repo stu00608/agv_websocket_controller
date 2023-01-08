@@ -69,7 +69,7 @@ function transmitVelocity(x, z) {
 function leftJoystickStart(event, nipple) {
     left_timer = setInterval(function () {
         transmitVelocity(linear_x, angular_z)
-    }, 25);
+    }, 200);
 }
 
 function leftJoystickMove(event, nipple) {
@@ -85,7 +85,7 @@ function leftJoystickEnd(event, nipple) {
 function rightJoystickStart(event, nipple) {
     right_timer = setInterval(function () {
         transmitVelocity(linear_x, angular_z)
-    }, 25);
+    }, 200);
 }
 
 function rightJoystickMove(event, nipple) {
