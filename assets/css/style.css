@@ -47,6 +47,11 @@ body {
     left: 0%;
 }
 
+.arrow-panel {
+    position: absolute;
+    margin: 10px;
+}
+
 .js-panel {
     position: absolute;
     width: 200px;

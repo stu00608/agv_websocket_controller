@@ -15,6 +15,8 @@ var max_rotate_value = 0.75;
 // mode 2: Auto control mode.
 var control_mode = 1;
 
+var arrow_control_timer = 0;
+
 var socket = null;
 var config = null;
 fetch('./assets/config/config.json')
@@ -49,21 +51,22 @@ fetch('./assets/config/config.json')
     })
     .catch(err => console.error(err));
 
-function wrapData(x, z, mode_2_round) {
+function wrapData(x, z, auto_mode, auto_mode_1_round) {
     return JSON.stringify({
-        mode: control_mode,
+        control_mode: control_mode,
+        auto_mode: auto_mode,
         x: x,
         z: z,
-        mode_2_round: mode_2_round
+        auto_mode_1_round: auto_mode_1_round
     });
 }
 
 function transmitVelocity(x, z) {
-    if (control_mode != 1) {
+    if (control_mode != 1 || control_mode != 3) {
         console.log("Wrong mode.")
         return;
     }
-    socket.send(wrapData(x, z, 0));
+    socket.send(wrapData(x, z, 0, 0));
 }
 
 function leftJoystickStart(event, nipple) {
@@ -140,6 +143,8 @@ function modeBtn1Callback() {
     }
     control_mode = 1;
     initJoystick();
+
+    $("#arrow-panel").css("display", "none");
 }
 
 function modeBtn2Callback() {
@@ -152,6 +157,21 @@ function modeBtn2Callback() {
     control_mode = 2;
     left_joystick.destroy();
     right_joystick.destroy();
+
+    $("#arrow-panel").css("display", "none");
+}
+
+function modeBtn3Callback() {
+    if (control_mode == 3) {
+        console.log("Already in button control mode.")
+        return;
+    }
+    control_mode = 3;
+    left_joystick.destroy();
+    right_joystick.destroy();
+
+    $("#arrow-panel").css("display", "block");
+    $("#arrow-panel").css("z-index", "999");
 }
 
 function sendAutoModeData() {
@@ -159,9 +179,96 @@ function sendAutoModeData() {
         console.log("Wrong mode.")
         return;
     }
-    var round = document.getElementById('numberSelect').value;
-    socket.send(wrapData(0, 0, round));
+
+    if ($("#modeSelect").val() == '') {
+        console.log("Please select a mode.");
+        return;
+    }
+    else if ($("#modeSelect").val() == '1') {
+        var round = document.getElementById('mode1Select').value;
+        socket.send(wrapData(0, 0, 1, round));
+    }
+    else if ($("#modeSelect").val() == '2') {
+        socket.send(wrapData(0, 0, 2, 0));
+    }
+    else if ($("#modeSelect").val() == '3') {
+        socket.send(wrapData(0, 0, 3, 0));
+    }
     $('#autoModeModal').modal('hide');
+}
+
+function updateModalInfo() {
+    var mode = $(this).val();
+    console.log(mode, typeof (mode));
+    if (mode == '') {
+        $("#mode1SelectZone").attr("style", "display: none;");
+        console.log("default selection");
+    }
+    else if (mode == '1') {
+        console.log("mode 1");
+        $("#mode1SelectZone").attr("style", "display: block;");
+    }
+    else if (mode == '2') {
+        console.log("mode 2");
+        $("#mode1SelectZone").attr("style", "display: none;");
+    }
+    else if (mode == '3') {
+        console.log("mode 3");
+        $("#mode1SelectZone").attr("style", "display: none;");
+    }
+}
+
+function upBtnCallback() {
+    if (control_mode != 3) {
+        console.log("Wrong mode.")
+        return;
+    }
+    if (arrow_control_timer) clearInterval(arrow_control_timer);
+    arrow_control_timer = setInterval(function () {
+        transmitVelocity(max_linear_value, 0);
+    }, 200);
+}
+
+function leftBtnCallback() {
+    if (control_mode != 3) {
+        console.log("Wrong mode.")
+        return;
+    }
+    if (arrow_control_timer) clearInterval(arrow_control_timer);
+    arrow_control_timer = setInterval(function () {
+        transmitVelocity(0, -max_rotate_value)
+    }, 200);
+}
+
+function rightBtnCallback() {
+    if (control_mode != 3) {
+        console.log("Wrong mode.")
+        return;
+    }
+    if (arrow_control_timer) clearInterval(arrow_control_timer);
+    arrow_control_timer = setInterval(function () {
+        transmitVelocity(0, max_rotate_value)
+    }, 200);
+}
+
+function downBtnCallback() {
+    if (control_mode != 3) {
+        console.log("Wrong mode.")
+        return;
+    }
+    if (arrow_control_timer) clearInterval(arrow_control_timer);
+    arrow_control_timer = setInterval(function () {
+        transmitVelocity(-max_linear_value, 0)
+    }, 200);
+}
+
+function btnReleaseCallback() {
+    if (control_mode != 3) {
+        console.log("Wrong mode.")
+        return;
+    }
+    if (arrow_control_timer) clearInterval(arrow_control_timer);
+    transmitVelocity(0, 0);
 }
 
 $(document).ready(function () {
@@ -175,7 +282,21 @@ $(document).ready(function () {
     // Button Event
     document.getElementById('modeBtn1').addEventListener('click', modeBtn1Callback);
     document.getElementById('modeBtn2').addEventListener('click', modeBtn2Callback);
+    document.getElementById('modeBtn3').addEventListener('click', modeBtn3Callback);
     $("#autoModeSubmitBtn").click(sendAutoModeData);
+
+    $('#modeSelect').change(updateModalInfo);
+
+    // Control panel button event
+    document.getElementById('upBtn').addEventListener('touchstart', upBtnCallback);
+    document.getElementById('leftBtn').addEventListener('touchstart', leftBtnCallback);
+    document.getElementById('rightBtn').addEventListener('touchstart', rightBtnCallback);
+    document.getElementById('downBtn').addEventListener('touchstart', downBtnCallback);
+
+    document.getElementById('upBtn').addEventListener('touchend', btnReleaseCallback);
+    document.getElementById('leftBtn').addEventListener('touchend', btnReleaseCallback);
+    document.getElementById('rightBtn').addEventListener('touchend', btnReleaseCallback);
+    document.getElementById('downBtn').addEventListener('touchend', btnReleaseCallback);
 
     // Control Mode
     control_mode = 1;

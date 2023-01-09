@@ -51,6 +51,35 @@
             </div>
         </div>
     </div>
+    <!-- A div area contains 4 arrow button. -->
+    <div class="arrow-panel right" id="arrow-panel" style="bottom: 0%; display: none;">
+        <div class="row">
+            <div class="col-sm-12" style="display: flex; justify-content: center;">
+                <button type="button" id="upBtn" class="btn btn-primary"
+                    style="width: 100px; height: 100px;">Up</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4" style="display: flex; justify-content: center;">
+                <button type="button" id="leftBtn" class="btn btn-primary"
+                    style="width: 100px; height: 100px;">Left</button>
+            </div>
+            <div class="col-sm-4" style="display: flex; justify-content: center;">
+                <div style="width: 100px; height: 100px;"></div>
+            </div>
+            <div class="col-sm-4" style="display: flex; justify-content: center;">
+                <button type="button" id="rightBtn" class="btn btn-primary"
+                    style="width: 100px; height: 100px;">Right</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12" style="display: flex; justify-content: center;">
+                <button type="button" id="downBtn" class="btn btn-primary"
+                    style="width: 100px; height: 100px;">Down</button>
+            </div>
+        </div>
+    </div>
+
     <div class="js-panel" id="js-left"></div>
     <div class="js-panel right" id="js-right"></div>
     <!-- A div area to show a bootstrap modal and show a dropdown list to selet from 0 ~ 10. -->
@@ -58,11 +87,21 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Select a number</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Select an auto mode</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body d-flex justify-content-center">
-                    <select class="form-select" aria-label="Default select example" id="numberSelect">
+                <div class="modal-body flex justify-content-center">
+                    <label for="modeSelect" class="col-form-label">Auto Mode</label>
+                    <select class="form-select" aria-label="Auto Mode" id="modeSelect">
+                        <option value="" selected>Select a mode</option>
+                        <option value="1">Auto 1</option>
+                        <option value="2">Auto 2</option>
+                        <option value="3">Auto 3</option>
+                    </select>
+                </div>
+                <div class="modal-body flex justify-content-center" style="display: none;" id="mode1SelectZone">
+                    <label for="mode1Select" class="col-form-label">Rounds</label>
+                    <select class="form-select" aria-label="Select how many rounds to move." id="mode1Select">
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
