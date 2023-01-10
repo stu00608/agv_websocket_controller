@@ -62,7 +62,7 @@ function wrapData(x, z, auto_mode, auto_mode_1_round) {
 }
 
 function transmitVelocity(x, z) {
-    if (control_mode != 1 || control_mode != 3) {
+    if (control_mode != 1 && control_mode != 3) {
         console.log("Wrong mode.")
         return;
     }
