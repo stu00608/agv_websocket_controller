@@ -136,7 +136,7 @@ function initJoystick() {
 function updateMaxVelocityRangeValue() {
     document.getElementById('maxVelocityRangeValue').innerHTML = document.getElementById('maxVelocityRange').value;
     max_linear_value = document.getElementById('maxVelocityRange').value;
-    max_rotate_value = document.getElementById('maxVelocityRange').value;
+    max_rotate_value = clamp(document.getElementById('maxVelocityRange').value * 1.25, 0.0, 1.0);
 }
 
 function modeBtn1Callback() {
