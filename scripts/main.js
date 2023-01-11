@@ -59,6 +59,7 @@ function wrapData(x, z, auto_mode, auto_mode_1_round) {
         z: z,
         auto_mode_1_round: auto_mode_1_round
     });
+    // return `${control_mode},${auto_mode},${x},${z},${auto_mode_1_round}`
 }
 
 function transmitVelocity(x, z) {
@@ -66,7 +67,9 @@ function transmitVelocity(x, z) {
         console.log("Wrong mode.")
         return;
     }
-    socket.send(wrapData(x, z, 0, 0));
+    var data = wrapData(roundOf(x, 3), roundOf(z, 3), 0, 0);
+    console.log(data);
+    socket.send(data);
 }
 
 function leftJoystickStart(event, nipple) {
