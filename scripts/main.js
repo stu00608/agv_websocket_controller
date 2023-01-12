@@ -11,6 +11,9 @@ const JOYSTICK_SIZE = 150;
 var max_linear_value = 0.75;
 var max_rotate_value = 0.75;
 
+var left_transmit_flag = false;
+var right_transmit_flag = false;
+
 // mode 1: Manual control mode. 
 // mode 2: Auto control mode.
 var control_mode = 1;
@@ -63,7 +66,7 @@ function wrapData(x, z, auto_mode, auto_mode_1_round) {
 }
 
 function transmitVelocity(x, z) {
-    if (control_mode != 1 && control_mode != 3) {
+    if (control_mode == 2) {
         console.log("Wrong mode.")
         return;
     }
@@ -72,10 +75,18 @@ function transmitVelocity(x, z) {
     socket.send(data);
 }
 
+function transmitLoop() {
+    console.log("looping")
+    if (left_transmit_flag || right_transmit_flag) {
+        transmitVelocity(linear_x, angular_z);
+    }
+}
+
 function leftJoystickStart(event, nipple) {
-    left_timer = setInterval(function () {
-        transmitVelocity(linear_x, angular_z)
-    }, 200);
+    // left_timer = setInterval(function () {
+    //     transmitVelocity(linear_x, angular_z)
+    // }, 200);
+    left_transmit_flag = true;
 }
 
 function leftJoystickMove(event, nipple) {
@@ -83,15 +94,22 @@ function leftJoystickMove(event, nipple) {
 }
 
 function leftJoystickEnd(event, nipple) {
-    if (left_timer) clearInterval(left_timer);
+    // if (left_timer) clearInterval(left_timer);
     linear_x = 0;
-    transmitVelocity(linear_x, angular_z);
+    left_transmit_flag = false;
+
+    // transmitVelocity(0, angular_z);
+    setTimeout(function () {
+        // left_transmit_flag = false;
+        transmitVelocity(0, angular_z);
+    }, 250);
 }
 
 function rightJoystickStart(event, nipple) {
-    right_timer = setInterval(function () {
-        transmitVelocity(linear_x, angular_z)
-    }, 200);
+    // right_timer = setInterval(function () {
+    //     transmitVelocity(linear_x, angular_z)
+    // }, 200);
+    right_transmit_flag = true;
 }
 
 function rightJoystickMove(event, nipple) {
@@ -99,9 +117,15 @@ function rightJoystickMove(event, nipple) {
 }
 
 function rightJoystickEnd(event, nipple) {
-    if (right_timer) clearInterval(right_timer);
+    // if (right_timer) clearInterval(right_timer);
     angular_z = 0;
-    transmitVelocity(linear_x, angular_z);
+    right_transmit_flag = false;
+
+    // transmitVelocity(linear_x, 0);
+    setTimeout(function () {
+        transmitVelocity(linear_x, 0);
+        // right_transmit_flag = false;
+    }, 250);
 }
 
 function initJoystick() {
@@ -229,7 +253,7 @@ function upBtnCallback() {
     if (arrow_control_timer) clearInterval(arrow_control_timer);
     arrow_control_timer = setInterval(function () {
         transmitVelocity(max_linear_value, 0);
-    }, 200);
+    }, 250);
 }
 
 function leftBtnCallback() {
@@ -240,7 +264,7 @@ function leftBtnCallback() {
     if (arrow_control_timer) clearInterval(arrow_control_timer);
     arrow_control_timer = setInterval(function () {
         transmitVelocity(0, -max_rotate_value)
-    }, 200);
+    }, 250);
 }
 
 function rightBtnCallback() {
@@ -251,7 +275,7 @@ function rightBtnCallback() {
     if (arrow_control_timer) clearInterval(arrow_control_timer);
     arrow_control_timer = setInterval(function () {
         transmitVelocity(0, max_rotate_value)
-    }, 200);
+    }, 250);
 }
 
 function downBtnCallback() {
@@ -262,7 +286,7 @@ function downBtnCallback() {
     if (arrow_control_timer) clearInterval(arrow_control_timer);
     arrow_control_timer = setInterval(function () {
         transmitVelocity(-max_linear_value, 0)
-    }, 200);
+    }, 250);
 }
 
 function btnReleaseCallback() {
@@ -271,7 +295,9 @@ function btnReleaseCallback() {
         return;
     }
     if (arrow_control_timer) clearInterval(arrow_control_timer);
-    transmitVelocity(0, 0);
+    setTimeout(function () {
+        transmitVelocity(0, 0);
+    }, 250);
 }
 
 $(document).ready(function () {
@@ -303,4 +329,6 @@ $(document).ready(function () {
 
     // Control Mode
     control_mode = 1;
+
+    setInterval(transmitLoop, 250);
 });
