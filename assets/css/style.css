@@ -49,17 +49,19 @@ body {
 
 .js-panel {
     position: absolute;
-    width: 200px;
-    height: 200px;
+    width: 225px;
+    height: 225px;
     margin: 10px;
 }
 
 #js-left {
-    top: 70%;
+    /* top: 70%; */
+    bottom: 0%;
 }
 
 #js-right {
-    top: 70%;
+    /* top: 70%; */
+    bottom: 0%;
     /* left:80% */
     right: 0%;
 }

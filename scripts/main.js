@@ -7,7 +7,7 @@ var right_timer = 0;
 var linear_x = 0;
 var angular_z = 0;
 
-const JOYSTICK_SIZE = 150;
+const JOYSTICK_SIZE = 180;
 var max_linear_value = 0.75;
 var max_rotate_value = 0.75;
 
@@ -263,7 +263,7 @@ function leftBtnCallback() {
     }
     if (arrow_control_timer) clearInterval(arrow_control_timer);
     arrow_control_timer = setInterval(function () {
-        transmitVelocity(0, -max_rotate_value)
+        transmitVelocity(0, max_rotate_value)
     }, 250);
 }
 
@@ -274,7 +274,7 @@ function rightBtnCallback() {
     }
     if (arrow_control_timer) clearInterval(arrow_control_timer);
     arrow_control_timer = setInterval(function () {
-        transmitVelocity(0, max_rotate_value)
+        transmitVelocity(0, -max_rotate_value)
     }, 250);
 }
 
