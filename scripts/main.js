@@ -7,6 +7,9 @@ var right_timer = 0;
 var linear_x = 0;
 var angular_z = 0;
 
+var transmit_hz = 4;
+var transmit_delay = 1000 / transmit_hz;
+
 const JOYSTICK_SIZE = 180;
 var max_linear_value = 0.75;
 var max_rotate_value = 0.75;
@@ -102,7 +105,7 @@ function leftJoystickEnd(event, nipple) {
     setTimeout(function () {
         // left_transmit_flag = false;
         transmitVelocity(0, angular_z);
-    }, 250);
+    }, transmit_delay);
 }
 
 function rightJoystickStart(event, nipple) {
@@ -125,7 +128,7 @@ function rightJoystickEnd(event, nipple) {
     setTimeout(function () {
         transmitVelocity(linear_x, 0);
         // right_transmit_flag = false;
-    }, 250);
+    }, transmit_delay);
 }
 
 function initJoystick() {
@@ -253,7 +256,7 @@ function upBtnCallback() {
     if (arrow_control_timer) clearInterval(arrow_control_timer);
     arrow_control_timer = setInterval(function () {
         transmitVelocity(max_linear_value, 0);
-    }, 250);
+    }, transmit_delay);
 }
 
 function leftBtnCallback() {
@@ -264,7 +267,7 @@ function leftBtnCallback() {
     if (arrow_control_timer) clearInterval(arrow_control_timer);
     arrow_control_timer = setInterval(function () {
         transmitVelocity(0, max_rotate_value)
-    }, 250);
+    }, transmit_delay);
 }
 
 function rightBtnCallback() {
@@ -275,7 +278,7 @@ function rightBtnCallback() {
     if (arrow_control_timer) clearInterval(arrow_control_timer);
     arrow_control_timer = setInterval(function () {
         transmitVelocity(0, -max_rotate_value)
-    }, 250);
+    }, transmit_delay);
 }
 
 function downBtnCallback() {
@@ -286,7 +289,7 @@ function downBtnCallback() {
     if (arrow_control_timer) clearInterval(arrow_control_timer);
     arrow_control_timer = setInterval(function () {
         transmitVelocity(-max_linear_value, 0)
-    }, 250);
+    }, transmit_delay);
 }
 
 function btnReleaseCallback() {
@@ -297,7 +300,7 @@ function btnReleaseCallback() {
     if (arrow_control_timer) clearInterval(arrow_control_timer);
     setTimeout(function () {
         transmitVelocity(0, 0);
-    }, 250);
+    }, transmit_delay);
 }
 
 $(document).ready(function () {
@@ -330,5 +333,5 @@ $(document).ready(function () {
     // Control Mode
     control_mode = 1;
 
-    setInterval(transmitLoop, 250);
+    setInterval(transmitLoop, transmit_delay);
 });
