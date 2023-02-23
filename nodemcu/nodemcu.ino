@@ -1,18 +1,19 @@
 #include <ArduinoJson.h>
-#include <ESP8266WiFi.h>
+// #include <ESP8266WiFi.h>
 #include <WebSocketsServer.h>
+#include <analogWrite.h>
 
 // 機器人參數
 #define WIDTH 1.0
 #define WHEEL_RADIUS 1.0
 
 // TODO: 控制腳位
-// #define LEFTDIRECTIONPIN 13
-// #define LEFTSPEEDPIN 11
-// #define LEFTBREAKPIN 12
-// #define RIGHTDIRECTIONPIN 8
-// #define RIGHTSPEEDPIN 6
-// #define RIGHTBREAKPIN 7
+#define LEFTDIRECTIONPIN 21
+#define LEFTSPEEDPIN 22
+#define LEFTBREAKPIN 23
+#define RIGHTDIRECTIONPIN 17
+#define RIGHTSPEEDPIN 16
+#define RIGHTBREAKPIN 4
 
 // 設定AP參數
 const char* ssid = "MovableBag";
@@ -33,12 +34,12 @@ WebSocketsServer webSocket = WebSocketsServer(webSocketPort);
 
 void setup() {
     // TODO: 初始化控制腳位
-    //    pinMode(LEFTDIRECTIONPIN, OUTPUT);
-    //    pinMode(LEFTSPEEDPIN, OUTPUT);
-    //    pinMode(LEFTBREAKPIN, OUTPUT);
-    //    pinMode(RIGHTDIRECTIONPIN, OUTPUT);
-    //    pinMode(RIGHTSPEEDPIN, OUTPUT);
-    //    pinMode(RIGHTBREAKPIN, OUTPUT);
+    pinMode(LEFTDIRECTIONPIN, OUTPUT);
+    pinMode(LEFTSPEEDPIN, OUTPUT);
+    pinMode(LEFTBREAKPIN, OUTPUT);
+    pinMode(RIGHTDIRECTIONPIN, OUTPUT);
+    pinMode(RIGHTSPEEDPIN, OUTPUT);
+    pinMode(RIGHTBREAKPIN, OUTPUT);
 
     // 連接到AP
     WiFi.mode(WIFI_AP);
@@ -69,7 +70,6 @@ void webSocketEvent(uint8_t num, WStype_t type, const uint8_t* payload,
             break;
         case WStype_CONNECTED:
             // 新客戶端連接
-            webSocket.sendTXT(num, "Hello, client!");
             break;
         case WStype_TEXT:
             // 收到文本消息
@@ -131,33 +131,33 @@ void motorControl(Omegas velocity) {
     float left_value = abs(velocity.omega_left);
     float right_value = abs(velocity.omega_right);
 
-    if (left_sign == 1) {
+    if (left_sign == -1) {
         left_directionPin = 1;
         left_break = 1;
-    } else if (left_sign == -1) {
+    } else if (left_sign == 1) {
         left_directionPin = 0;
         left_break = 1;
     } else {
         left_break = 0;
     }
 
-    if (right_sign == 1) {
+    if (right_sign == -1) {
         right_directionPin = 1;
         right_break = 1;
-    } else if (right_sign == -1) {
+    } else if (right_sign == 1) {
         right_directionPin = 0;
         right_break = 1;
     } else {
         right_break = 0;
     }
 
-    // digitalWrite(LEFTDIRECTIONPIN, left_directionPin);
-    // analogWrite(LEFTSPEEDPIN, left_value);
-    // digitalWrite(LEFTBREAKPIN, left_break);
+    digitalWrite(LEFTDIRECTIONPIN, left_directionPin);
+    analogWrite(LEFTSPEEDPIN, left_value);
+    digitalWrite(LEFTBREAKPIN, left_break);
 
-    // digitalWrite(RIGHTDIRECTIONPIN, right_directionPin);
-    // analogWrite(RIGHTSPEEDPIN, right_value);
-    // digitalWrite(RIGHTBREAKPIN, right_break);
+    digitalWrite(RIGHTDIRECTIONPIN, right_directionPin);
+    analogWrite(RIGHTSPEEDPIN, right_value);
+    digitalWrite(RIGHTBREAKPIN, right_break);
 
     Serial.print(left_directionPin);
     Serial.print(" , ");
