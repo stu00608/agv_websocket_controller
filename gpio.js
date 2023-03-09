@@ -17,9 +17,9 @@ function digitalWrite(pin, state) {
 function analogWrite(pin, value) {
   if (!(pin in gpioDict)) {
     gpioDict[pin] = new Gpio(pin, {mode: Gpio.OUTPUT});
-    // gpioDict[pin].pullUpDown(Gpio.PUD_UP);
+    gpioDict[pin].pwmFrequency(400);
   }
-
+  // console.log(gpioDict[pin].getPwmFrequency());
   gpioDict[pin].pwmWrite(value);
 }
 

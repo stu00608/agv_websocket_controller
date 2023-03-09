@@ -10,7 +10,7 @@ const LEFTDIRECTIONPIN = 17;
 const LEFTSPEEDPIN = 27;
 const LEFTBREAKPIN = 22;
 const RIGHTDIRECTIONPIN = 23;
-const RIGHTSPEEDPIN = 24;
+const RIGHTSPEEDPIN = 10;
 const RIGHTBREAKPIN = 25;
 
 server.on('connection', function connection(socket) {
@@ -19,7 +19,6 @@ server.on('connection', function connection(socket) {
     socket.on('message', function incoming(message) {
         message = message.toString();
         message = JSON.parse(message);
-        // console.log(message);
         let vel = calc_velocity(message.x, message.z);
         if (message.control_mode != 2) {
             motor_control(vel);
@@ -32,22 +31,11 @@ server.on('connection', function connection(socket) {
 });
 
 function calc_velocity(x, z) {
-
     let omega_left = ((x - (z * WIDTH) / 2.0) / WHEEL_RADIUS);
-    omega_left = Math.min(
-        1.0,
-        Math.max(-1.0, (omega_left - (-1.0)) * (1.0 - (-1.0)) / (1.0 - (-1.0)) +
-            (-1.0))
-    );
     omega_left *= 255.0;
     omega_left = Math.floor(omega_left);
 
     let omega_right = ((x + (z * WIDTH) / 2.0) / WHEEL_RADIUS);
-    omega_right = Math.min(
-        1.0,
-        Math.max(-1.0, (omega_right - (-1.0)) * (1.0 - (-1.0)) / (1.0 - (-1.0)) +
-            (-1.0))
-    );
     omega_right *= 255.0;
     omega_right = Math.floor(omega_right);
 
@@ -55,34 +43,13 @@ function calc_velocity(x, z) {
 }
 
 function motor_control(velocity) {
-
-    let left_directionPin, right_directionPin, left_break, right_break;
-    let left_sign = Math.sign(velocity.omega_left);
-    let right_sign = Math.sign(velocity.omega_right);
+    let left_directionPin = +(velocity.omega_left < 0);
     let left_value = Math.abs(velocity.omega_left);
+    let left_break = +(velocity.omega_left != 0);
+
+    let right_directionPin = +(velocity.omega_right < 0);
     let right_value = Math.abs(velocity.omega_right);
-
-    if (left_sign == 1) {
-        left_directionPin = 1;
-        left_break = 1;
-    } else if (left_sign == -1) {
-        left_directionPin = 0;
-        left_break = 1;
-    } else {
-        left_directionPin = 0;
-        left_break = 0;
-    }
-
-    if (right_sign == 1) {
-        right_directionPin = 1;
-        right_break = 1;
-    } else if (right_sign == -1) {
-        right_directionPin = 0;
-        right_break = 1;
-    } else {
-        right_directionPin = 0;
-        right_break = 0;
-    }
+    let right_break = +(velocity.omega_right != 0);
 
     console.log(
         left_directionPin,
