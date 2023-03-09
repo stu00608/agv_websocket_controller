@@ -1,24 +1,5 @@
-# AGV Websocket Controller
+# AGV Websocket Controller in RPi
 
-- This repo contains the web front end controller of AGV, sending virtual joystick value to Arduino server via websocket protocol.
+### Working...
 
-## Installation
-
-- NodeJS
-- Python
-
-### Web app
-
-- Use npx to host the server.
-
-```
-npx serve
-```
-
-### Python example
-
-- `pip install -r requirements.txt`
-
-## Configuration
-
-- Change your websocket server url in `assets/config/config.json`.
+<!-- TODO: Write the instruction for raspberry pi 3b+/4 setup -->
