@@ -3,8 +3,10 @@ const { digitalWrite, analogWrite } = require('./gpio.js');
 
 const server = new WebSocket.Server({ port: 666, host: '0.0.0.0' });
 
-const WIDTH = 1.0; // Replace with your own value
-const WHEEL_RADIUS = 1.0; // Replace with your own value
+const DEBUG = false;
+
+const WIDTH = 0.65; // width of the vehicle
+const WHEEL_RADIUS = 0.055; // radius of the wheels
 
 const LEFTDIRECTIONPIN = 17;
 const LEFTSPEEDPIN = 27;
@@ -13,12 +15,16 @@ const RIGHTDIRECTIONPIN = 23;
 const RIGHTSPEEDPIN = 10;
 const RIGHTBREAKPIN = 25;
 
+const MAX_VEL_VALUE = ((1.0 + (1.0 * WIDTH) / 2.0) / WHEEL_RADIUS);
+console.log(MAX_VEL_VALUE);
+
 server.on('connection', function connection(socket) {
     console.log('A client connected');
 
     socket.on('message', function incoming(message) {
         message = message.toString();
         message = JSON.parse(message);
+        console.log(message.x, message.z);
         let vel = calc_velocity(message.x, message.z);
         if (message.control_mode != 2) {
             motor_control(vel);
@@ -30,16 +36,31 @@ server.on('connection', function connection(socket) {
     });
 });
 
+function map_value(value, fromLow, fromHigh, toLow, toHigh) {
+  return toLow + (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow);
+}
+
 function calc_velocity(x, z) {
+
+    // Scale up the rotation speed if only rotating.
+    if (x == 0) {
+        z = clamp(z*2.0, -1.0, 1.0);
+        console.log(`z=${z}`);
+    } 
+
     let omega_left = ((x - (z * WIDTH) / 2.0) / WHEEL_RADIUS);
-    omega_left *= 255.0;
+    omega_left = Math.sign(omega_left)*map_value(Math.abs(omega_left), 0, MAX_VEL_VALUE, 0, 255.0);
     omega_left = Math.floor(omega_left);
 
     let omega_right = ((x + (z * WIDTH) / 2.0) / WHEEL_RADIUS);
-    omega_right *= 255.0;
+    omega_right = Math.sign(omega_right)*map_value(Math.abs(omega_right), 0, MAX_VEL_VALUE, 0, 255.0);
     omega_right = Math.floor(omega_right);
 
     return { omega_left, omega_right };
+}
+
+function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
 }
 
 function motor_control(velocity) {
@@ -65,12 +86,14 @@ function motor_control(velocity) {
         right_break
     );
 
-    digitalWrite(LEFTDIRECTIONPIN, left_directionPin);
-    analogWrite(LEFTSPEEDPIN, left_value);
-    digitalWrite(LEFTBREAKPIN, left_break);
+    if(!DEBUG){
+        digitalWrite(LEFTDIRECTIONPIN, left_directionPin);
+        analogWrite(LEFTSPEEDPIN, left_value);
+        digitalWrite(LEFTBREAKPIN, left_break);
 
-    digitalWrite(RIGHTDIRECTIONPIN, right_directionPin);
-    analogWrite(RIGHTSPEEDPIN, right_value);
-    digitalWrite(RIGHTBREAKPIN, right_break);
+        digitalWrite(RIGHTDIRECTIONPIN, right_directionPin);
+        analogWrite(RIGHTSPEEDPIN, right_value);
+        digitalWrite(RIGHTBREAKPIN, right_break);
+    }
 
 }

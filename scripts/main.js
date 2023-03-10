@@ -1,3 +1,5 @@
+const JOYSTICK_SIZE = 180;
+
 var left_joystick = null;
 var right_joystick = null;
 
@@ -10,9 +12,8 @@ var angular_z = 0;
 var transmit_hz = 4;
 var transmit_delay = 1000 / transmit_hz;
 
-const JOYSTICK_SIZE = 180;
-var max_linear_value = 0.75;
-var max_rotate_value = 0.75;
+var max_linear_value = 1.0;
+var max_rotate_value = 1.0;
 
 var left_transmit_flag = false;
 var right_transmit_flag = false;
@@ -163,7 +164,7 @@ function initJoystick() {
 function updateMaxVelocityRangeValue() {
     document.getElementById('maxVelocityRangeValue').innerHTML = document.getElementById('maxVelocityRange').value;
     max_linear_value = document.getElementById('maxVelocityRange').value;
-    max_rotate_value = clamp(document.getElementById('maxVelocityRange').value * 1.25, 0.0, 1.0);
+    max_rotate_value = document.getElementById('maxVelocityRange').value;
 }
 
 function modeBtn1Callback() {
