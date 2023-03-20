@@ -30,7 +30,5 @@ sudo node lib_test.js
 
 sudo ./setup_ap.sh Movablebag_Pi4 kaipodoctor
 
-sudo sed -i '/^network={/,/^}/d' /etc/wpa_supplicant/wpa_supplicant.conf
-
 sudo reboot now
 ```
