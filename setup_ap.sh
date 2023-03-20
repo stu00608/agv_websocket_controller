@@ -27,7 +27,7 @@ sudo systemctl stop dnsmasq
 # Configure DHCP server
 sudo tee /etc/dnsmasq.conf > /dev/null <<EOF
 interface=wlan0
-dhcp-range-192.168.4.2, 192.168.4.100,255.255.255.0, 12h
+dhcp-range=192.168.4.2,192.168.4.100,255.255.255.0,12h
 EOF
 
 # Configure hostapd
