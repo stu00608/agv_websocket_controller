@@ -32,4 +32,6 @@ npm install pigpio ws lite-server
 sudo node lib_test.js
 
 sudo ./setup_ap.sh Movablebag_Pi4 kaipodoctor
+
+sudo reboot now
 ```
