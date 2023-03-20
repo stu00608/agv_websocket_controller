@@ -56,6 +56,8 @@ wpa_pairwise=TKIP
 rsn_pairwise=CCMP
 EOF
 
+sudo sed -i '/^network={/,/^}/d' /etc/wpa_supplicant/wpa_supplicant.conf
+
 # Start the dnsmasq and hostapd services
 systemctl start dnsmasq
 systemctl start hostapd
