@@ -47,28 +47,28 @@ rsn_pairwise=CCMP
 EOF
 
 # Configure hostapd service
-sudo tee /etc/systemd/system/hostapd.service > /dev/null <<EOF
-[Unit]
-Description=Advanced IEEE 802.11 AP and IEEE 802.1X/WPA/WPA2/EAP Authenticator
-After=network.target
-
-[Service]
-Type=forking
-PIDFile=/run/hostapd.pid
-ExecStart=/usr/sbin/hostapd -B /etc/hostapd/hostapd.conf
-ExecReload=/bin/kill -HUP \$MAINPID
-
-[Install]
-WantedBy=multi-user.target
-EOF
+# sudo tee /etc/systemd/system/hostapd.service > /dev/null <<EOF
+# [Unit]
+# Description=Advanced IEEE 802.11 AP and IEEE 802.1X/WPA/WPA2/EAP Authenticator
+# After=network.target
+# 
+# [Service]
+# Type=forking
+# PIDFile=/run/hostapd.pid
+# ExecStart=/usr/sbin/hostapd -B /etc/hostapd/hostapd.conf
+# ExecReload=/bin/kill -HUP \$MAINPID
+# 
+# [Install]
+# WantedBy=multi-user.target
+# EOF
 
 # Configure dnsmasq service
-sudo mkdir -p /etc/systemd/system/dnsmasq.service.d && sudo touch /etc/systemd/system/dnsmasq.service.d/local.conf
-sudo tee /etc/systemd/system/dnsmasq.service.d/local.conf > /dev/null <<EOF
-[Service]
-ExecStartPre=/usr/sbin/iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-ExecStopPost=/usr/sbin/iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
-EOF
+# sudo mkdir -p /etc/systemd/system/dnsmasq.service.d && sudo touch /etc/systemd/system/dnsmasq.service.d/local.conf
+# sudo tee /etc/systemd/system/dnsmasq.service.d/local.conf > /dev/null <<EOF
+# [Service]
+# ExecStartPre=/usr/sbin/iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+# ExecStopPost=/usr/sbin/iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+# EOF
 
 # Enable and start services
 sudo systemctl unmask hostapd
