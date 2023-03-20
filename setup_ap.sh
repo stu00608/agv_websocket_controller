@@ -63,6 +63,7 @@ WantedBy=multi-user.target
 EOF
 
 # Configure dnsmasq service
+sudo mkdir -p /etc/systemd/system/dnsmasq.service.d && sudo touch /etc/systemd/system/dnsmasq.service.d/local.conf
 sudo tee /etc/systemd/system/dnsmasq.service.d/local.conf > /dev/null <<EOF
 [Service]
 ExecStartPre=/usr/sbin/iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
