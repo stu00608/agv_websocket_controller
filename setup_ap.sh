@@ -1,41 +1,51 @@
 #!/bin/bash
 
-# Check if two parameters are provided
-if [ $# -ne 2 ]; then
-  echo "Usage: $0 SSID PASSWORD"
-  exit 1
+# Check if running as root
+if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root."
+    exit 1
 fi
 
-SSID="$1"
-PASSWORD="$2"
+# Check if SSID and password are provided
+if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "Usage: sudo ./setup_ap.sh <SSID> <PASSWORD>"
+    exit 1
+fi
 
-# Install necessary packages
-sudo apt update
-sudo apt install hostapd dnsmasq -y
+# Update the package list and upgrade any installed packages
+sudo apt-get update && apt upgrade -y
 
-# Stop services
+# Install hostapd and dnsmasq if not already installed
+sudo apt-get install -y hostapd dnsmasq
+
+# Unmask hostapd and dnsmasq
+sudo systemctl unmask hostapd
+sudo systemctl unmask dnsmasq
+
+# Stop the hostapd and dnsmasq services
 sudo systemctl stop hostapd
 sudo systemctl stop dnsmasq
 
-# Configure static IP address
-# sudo tee /etc/dhcpcd.conf > /dev/null <<EOF
-# interface wlan0
-# static ip_address=192.168.4.1/24
-# nohook wpa_supplicant
-# EOF
+# Configure the wlan0 interface
+cat << EOF >> /etc/network/interfaces
+auto wlan0
+iface wlan0 inet static
+  address 192.168.4.1
+  netmask 255.255.255.0
+EOF
 
-# Configure DHCP server
-sudo tee /etc/dnsmasq.conf > /dev/null <<EOF
+# Configure dnsmasq
+cat << EOF >> /etc/dnsmasq.conf
 interface=wlan0
-dhcp-range=192.168.4.2,192.168.4.100,255.255.255.0,12h
+dhcp-range=192.168.4.2,192.168.4.100,255.255.255.0,24h
 EOF
 
 # Configure hostapd
-sudo tee /etc/hostapd/hostapd.conf > /dev/null <<EOF
+cat << EOF >> /etc/hostapd/hostapd.conf
 interface=wlan0
-ssid=$SSID
+ssid=$1
 hw_mode=g
-channel=6
+channel=7
 macaddr_acl=0
 auth_algs=1
 ignore_broadcast_ssid=0
@@ -46,34 +56,8 @@ wpa_pairwise=TKIP
 rsn_pairwise=CCMP
 EOF
 
-# Configure hostapd service
-# sudo tee /etc/systemd/system/hostapd.service > /dev/null <<EOF
-# [Unit]
-# Description=Advanced IEEE 802.11 AP and IEEE 802.1X/WPA/WPA2/EAP Authenticator
-# After=network.target
-# 
-# [Service]
-# Type=forking
-# PIDFile=/run/hostapd.pid
-# ExecStart=/usr/sbin/hostapd -B /etc/hostapd/hostapd.conf
-# ExecReload=/bin/kill -HUP \$MAINPID
-# 
-# [Install]
-# WantedBy=multi-user.target
-# EOF
+# Start the dnsmasq and hostapd services
+systemctl start dnsmasq
+systemctl start hostapd
 
-# Configure dnsmasq service
-# sudo mkdir -p /etc/systemd/system/dnsmasq.service.d && sudo touch /etc/systemd/system/dnsmasq.service.d/local.conf
-# sudo tee /etc/systemd/system/dnsmasq.service.d/local.conf > /dev/null <<EOF
-# [Service]
-# ExecStartPre=/usr/sbin/iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-# ExecStopPost=/usr/sbin/iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
-# EOF
-
-# Enable and start services
-sudo systemctl unmask hostapd
-sudo systemctl unmask dnsmasq
-sudo systemctl enable hostapd
-sudo systemctl enable dnsmasq
-sudo systemctl start hostapd
-sudo systemctl start dnsmasq
+echo "Wireless access point configured with SSID: $1 and password: $2"
