@@ -15,8 +15,6 @@ fi
 # Update the package list and upgrade any installed packages
 sudo apt-get update && apt upgrade -y
 
-sudo raspi-config nonint do_wifi_country TW
-
 # Install hostapd and dnsmasq if not already installed
 sudo apt-get install -y hostapd dnsmasq bridge-utils
 
