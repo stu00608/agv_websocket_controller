@@ -30,7 +30,6 @@ sudo systemctl unmask dnsmasq
 cat << EOF >> /etc/dhcpcd.conf
 interface wlan0
 static ip_address=192.168.4.1/24
-denyinterfaces eth0
 denyinterfaces wlan0
 EOF
 
