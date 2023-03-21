@@ -37,6 +37,8 @@ EOF
 cat << EOF >> /etc/dnsmasq.conf
 interface=wlan0
   dhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h
+server=8.8.8.8
+server=8.8.4.4
 EOF
 
 # Configure hostapd
