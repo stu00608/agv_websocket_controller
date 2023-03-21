@@ -26,6 +26,7 @@ sudo systemctl stop dnsmasq
 
 # Unmask hostapd and dnsmasq
 sudo systemctl unmask hostapd
+sudo systemctl unmask dnsmasq
 
 # Configure dhcpcd
 cat << EOF >> /etc/dhcpcd.conf
@@ -78,7 +79,7 @@ echo 'net.ipv4.ip_forward=1' | sudo tee -a /etc/sysctl.conf
 
 sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
-iptables-restore < /etc/iptables.ipv4.nat
+sudo iptables-restore < /etc/iptables.ipv4.nat
 
 # Bridging network
 sudo brctl addbr br0
