@@ -1,0 +1,14 @@
+[Unit]
+Description=Lite server for AGV
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/agv_websocket_controller
+ExecStart=/usr/bin/npx lite-server
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

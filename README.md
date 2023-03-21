@@ -6,7 +6,7 @@
 * Using tools like `Raspberry Pi Imager` to write Pi OS (64-bit is good).
 * Make sure you setup username, password, wifi settings correctly, you need internet access for updating and downloading packages.
 
-## Install dependencies
+## Installation 
 ```
 sudo sh -c "echo 'hdmi_force_hotplug=1' >> /boot/config.txt"
 
@@ -25,6 +25,11 @@ sudo apt-get install -y pigpio
 git clone https://github.com/stu00608/agv_websocket_controller.git && cd agv_websocket_controller
 npm install pigpio ws lite-server
 sudo node lib_test.js
+
+sudo mv ./assets/services/lite-server.service /etc/systemd/system/lite-server.service
+sudo mv ./assets/services/ws-server.service /etc/systemd/system/ws-server.service
+
+sudo systemctl enable lite-server.service ws-server.service
 
 sudo ./setup_ap.sh Movablebag_Pi4 kaipodoctor
 
