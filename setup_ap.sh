@@ -16,7 +16,7 @@ fi
 sudo apt-get update -y && sudo apt-get upgrade -y
 
 # Install hostapd and dnsmasq if not already installed
-sudo apt-get install -y hostapd dnsmasq bridge-utils
+sudo apt-get install -y hostapd dnsmasq
 
 # Stop the hostapd and dnsmasq services
 sudo systemctl stop hostapd
@@ -32,17 +32,6 @@ interface wlan0
 static ip_address=192.168.4.1/24
 denyinterfaces eth0
 denyinterfaces wlan0
-EOF
-
-# Configure the wlan0 interface
-cat << EOF >> /etc/network/interfaces
-# interfaces(5) file used by ifup(8) and ifdown(8)
-# Include files from /etc/network/interfaces.d:
-source /etc/network/interfaces.d/*
-
-auto br0
-iface br0 inet manual
-bridge_ports eth0 wlan0
 EOF
 
 # Configure dnsmasq
@@ -71,19 +60,6 @@ EOF
 
 # Add default hostapd path
 echo 'DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee -a /etc/default/hostapd
-
-# Add network forwarding 
-echo 'net.ipv4.ip_forward=1' | sudo tee -a /etc/sysctl.conf
-
-sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
-iptables-restore < /etc/iptables.ipv4.nat
-
-# Bridging network
-sudo brctl addbr br0
-sudo brctl addif br0 eth0
-
-sudo route add default gw 192.168.0.1 dev eth0
 
 # Start the dnsmasq and hostapd services
 sudo systemctl enable dnsmasq
