@@ -15,6 +15,8 @@ fi
 # Update the package list and upgrade any installed packages
 sudo apt-get update && apt upgrade -y
 
+sudo raspi-config nonint do_wifi_country TW
+
 # Install hostapd and dnsmasq if not already installed
 sudo apt-get install -y hostapd dnsmasq bridge-utils
 
@@ -81,6 +83,8 @@ iptables-restore < /etc/iptables.ipv4.nat
 # Bridging network
 sudo brctl addbr br0
 sudo brctl addif br0 eth0
+
+sudo route add default gw 192.168.0.1 dev eth0
 
 # Start the dnsmasq and hostapd services
 sudo systemctl enable dnsmasq
