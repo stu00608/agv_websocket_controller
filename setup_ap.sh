@@ -13,7 +13,7 @@ if [ -z "$1" ] || [ -z "$2" ]; then
 fi
 
 # Update the package list and upgrade any installed packages
-sudo apt-get update && apt upgrade -y
+sudo apt-get update -y && sudo apt-get upgrade -y
 
 # Install hostapd and dnsmasq if not already installed
 sudo apt-get install -y hostapd dnsmasq bridge-utils
@@ -77,7 +77,7 @@ echo 'net.ipv4.ip_forward=1' | sudo tee -a /etc/sysctl.conf
 
 sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
-sudo iptables-restore < /etc/iptables.ipv4.nat
+iptables-restore < /etc/iptables.ipv4.nat
 
 # Bridging network
 sudo brctl addbr br0
