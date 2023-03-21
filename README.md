@@ -8,13 +8,11 @@
 
 ## Install dependencies
 ```
-sudo sh -c 'echo "LANG=en_US.UTF-8" >> /etc/environment && echo "LC_ALL=en_US.UTF-8" >> /etc/environment'
 sudo sh -c "echo 'hdmi_force_hotplug=1' >> /boot/config.txt"
 
-sudo reboot now
-```
+sudo raspi-config nonint do_boot_behaviour B1
+sudo raspi-config nonint do_wifi_country TW
 
-```bash
 sudo apt-get update -y && sudo apt-get upgrade -y && sudo apt-get install git vim tmux net-tools gcc g++ make curl gnupg -y
 
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
