@@ -1,6 +1,6 @@
 [Unit]
 Description=WebSocket server for AGV
-After=network.target
+After=network.target hostapd.service dnsmasq.service
 
 [Service]
 Type=simple
