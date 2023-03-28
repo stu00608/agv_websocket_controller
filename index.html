@@ -12,109 +12,56 @@
 </head>
 
 <body>
-
     <div id="container">
+
+        <nav class="navbar navbar-light">
+            <div class="container-fluid">
+                <span class="navbar-brand mb-0 h1">Robot Controller</span>
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="joysticks-tab" href="#">Joysticks</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="arrow-tab" href="#">Arrow</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
         <div class="display-panel">
-            <div class="row m-2">
-                <div class="col-sm-4"></div>
-                <div class="col-sm-2" style="display: flex;align-items: center; justify-content: left;">0</div>
-                <div class="col-sm-3" style="display: flex;align-items: center; justify-content: center;">0.5</div>
-                <div class="col-sm-2" style="display: flex;align-items: center; justify-content: right;">1</div>
-            </div>
-            <div class="row m-2">
-                <div class="col-sm-4">
-                    <h3><small>Max Velocity</small></h3>
+            <div class="slider-container">
+                <div class="title">Max Velocity</div>
+                <div class="slider-wrapper">
+                    <input type="range" min="0" max="0.5" step="0.01" value="0.2" class="slider" id="velocity-slider">
+                    <div class="slider-values">
+                        <span class="min-value">0</span>
+                        <span class="max-value">0.5</span>
+                    </div>
                 </div>
-                <div class="col-sm-7" style="display: flex;align-items: center; justify-content: center;">
-                    <input type="range" class="form-range" id="maxVelocityRange" value="0.2" min="0" max="1" step="0.01">
-                </div>
-                <div class="col-sm-1" style="display: flex;align-items: center; justify-content: center;">
-                    <label for="maxVelocityRange"><span id="maxVelocityRangeValue"></span></label>
-                </div>
-            </div>
-            <div class="row m-5">
-                <div class="col-sm-4">
-                    <button type="button" id="modeBtn1" class="btn btn-primary"
-                        style="width: 100px; height: 100px;">Manual</button>
-                </div>
-                <div class="col-sm-4">
-                    <button type="button" id="modeBtn2" class="btn btn-primary"
-                        style="width: 100px; height: 100px;">Auto</button>
-                </div>
-                <div class="col-sm-4">
-                    <button type="button" id="modeBtn3" class="btn btn-primary"
-                        style="width: 100px; height: 100px;">Arrow</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- A div area contains 4 arrow button. -->
-    <div class="arrow-panel right" id="arrow-panel" style="bottom: 0%; display: none;">
-        <div class="row">
-            <div class="col-sm-12" style="display: flex; justify-content: center;">
-                <button type="button" id="upBtn" class="btn btn-primary"
-                    style="width: 100px; height: 100px;">Up</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-4" style="display: flex; justify-content: center;">
-                <button type="button" id="leftBtn" class="btn btn-primary"
-                    style="width: 100px; height: 100px;">Left</button>
-            </div>
-            <div class="col-sm-4" style="display: flex; justify-content: center;">
-                <div style="width: 100px; height: 100px;"></div>
-            </div>
-            <div class="col-sm-4" style="display: flex; justify-content: center;">
-                <button type="button" id="rightBtn" class="btn btn-primary"
-                    style="width: 100px; height: 100px;">Right</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12" style="display: flex; justify-content: center;">
-                <button type="button" id="downBtn" class="btn btn-primary"
-                    style="width: 100px; height: 100px;">Down</button>
+                <span class="current-value">0.5</span>
             </div>
         </div>
     </div>
 
+    <!-- A div area contains 4 arrow button. -->
     <div class="js-panel" id="js-left"></div>
     <div class="js-panel right" id="js-right"></div>
-    <!-- A div area to show a bootstrap modal and show a dropdown list to selet from 0 ~ 10. -->
-    <div class="modal fade" id="autoModeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Select an auto mode</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body flex justify-content-center">
-                    <label for="modeSelect" class="col-form-label">Auto Mode</label>
-                    <select class="form-select" aria-label="Auto Mode" id="modeSelect">
-                        <option value="" selected>Select a mode</option>
-                        <option value="1">Auto 1</option>
-                        <option value="2">Auto 2</option>
-                        <option value="3">Auto 3</option>
-                    </select>
-                </div>
-                <div class="modal-body flex justify-content-center" style="display: none;" id="mode1SelectZone">
-                    <label for="mode1Select" class="col-form-label">Rounds</label>
-                    <select class="form-select" aria-label="Select how many rounds to move." id="mode1Select">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                    </select>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="autoModeSubmitBtn">Submit</button>
-                </div>
-            </div>
+
+    <div class="container arrow-panel">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col text-center"><button class="btn btn-primary arrow-btn">Up</button></div>
+            <div class="col"></div>
+        </div>
+        <div class="row">
+            <div class="col text-center"><button class="btn btn-primary arrow-btn">Left</button></div>
+            <div class="col text-center"><button class="btn btn-danger arrow-btn">Stop</button></div>
+            <div class="col text-center"><button class="btn btn-primary arrow-btn">Right</button></div>
+        </div>
+        <div class="row">
+            <div class="col"></div>
+            <div class="col text-center"><button class="btn btn-primary arrow-btn">Down</button></div>
+            <div class="col"></div>
         </div>
     </div>
 
