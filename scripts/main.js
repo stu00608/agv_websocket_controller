@@ -1,5 +1,3 @@
-const socket = new WebSocket('ws://192.168.4.1:666');
-
 let xValue = 0;
 let zValue = 0;
 
@@ -27,10 +25,18 @@ const rightJoystickOptions = {
 
 let leftJoystick = null;
 let rightJoystick = null;
+let socket = null;
+
+let alertOption =  {
+    position: "top-right",
+    maxNotifications: 2
+}
+let notifier = new AWN(alertOption)
 
 function connectWebSocket() {
-    const socket = new WebSocket('ws://192.168.4.1:666');
+    socket = new WebSocket('ws://192.168.4.1:666');
 
+    
     socket.onopen = () => {
         // Update the indicator and button when connected
         $('#ws-indicator').removeClass('ws-disconnected').addClass('ws-connected');
@@ -57,6 +63,8 @@ function connectWebSocket() {
             sendJoystickData();
         });
 
+	notifier.success("Successfully connected to websocket server.");
+
     };
 
     socket.onerror = () => {
@@ -64,6 +72,8 @@ function connectWebSocket() {
         $('#ws-indicator').removeClass('ws-connected').addClass('ws-disconnected');
         $('#online-indicator').removeClass('ws-connected').addClass('ws-disconnected');
         $('#connect-btn').prop('disabled', false);
+
+	notifier.alert("Failed to connect websocket server");
     };
 
     socket.onclose = () => {
@@ -71,6 +81,8 @@ function connectWebSocket() {
         $('#ws-indicator').removeClass('ws-connected').addClass('ws-disconnected');
         $('#online-indicator').removeClass('ws-connected').addClass('ws-disconnected');
         $('#connect-btn').prop('disabled', false);
+
+	notifier.info("Websocket connection closed");
     };
 }
 
