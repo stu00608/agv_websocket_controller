@@ -14,14 +14,13 @@
 
 <body>
     <div id="container">
-
         <nav class="navbar navbar-light">
             <div class="container-fluid">
                 <div style="margin: 0%;">
                     <div class="ws-disconnected" id="online-indicator">
                         <span class="blink ws-disconnected" id="ws-indicator"></span>
                     </div>
-                    <span class="navbar-brand mb-0 h1">Robot Controller</span>
+                    <span class="navbar-brand mb-0 h1">MovableBag+ Controller</span>
 
                 </div>
                 <ul class="nav nav-pills">
@@ -39,13 +38,13 @@
             <div class="slider-container">
                 <div class="title">Max Velocity</div>
                 <div class="slider-wrapper">
-                    <input type="range" min="0" max="0.5" step="0.01" value="0.2" class="slider" id="velocity-slider">
+                    <input type="range" min="0" max="0.3" step="0.01" value="0.2" class="slider" id="velocity-slider">
                     <div class="slider-values">
                         <span class="min-value">0</span>
-                        <span class="max-value">0.5</span>
+                        <span class="max-value">0.3</span>
                     </div>
                 </div>
-                <span class="current-value">0.5</span>
+                <span class="current-value">0.2</span>
             </div>
             <button class="btn btn-primary" id="connect-btn">Connect</button>
         </div>
@@ -58,17 +57,17 @@
     <div class="container arrow-panel">
         <div class="row">
             <div class="col"></div>
-            <div class="col text-center"><button class="btn btn-primary arrow-btn">Up</button></div>
+            <div class="col text-center"><button class="btn btn-primary arrow-btn" id="forward_btn">Up</button></div>
             <div class="col"></div>
         </div>
         <div class="row">
-            <div class="col text-center"><button class="btn btn-primary arrow-btn">Left</button></div>
-            <div class="col text-center"><button class="btn btn-danger arrow-btn">Stop</button></div>
-            <div class="col text-center"><button class="btn btn-primary arrow-btn">Right</button></div>
+            <div class="col text-center"><button class="btn btn-primary arrow-btn" id="left_btn">Left</button></div>
+            <div class="col text-center"><button class="btn btn-danger arrow-btn" id="stop_btn">Stop</button></div>
+            <div class="col text-center"><button class="btn btn-primary arrow-btn" id="right_btn">Right</button></div>
         </div>
         <div class="row">
             <div class="col"></div>
-            <div class="col text-center"><button class="btn btn-primary arrow-btn">Down</button></div>
+            <div class="col text-center"><button class="btn btn-primary arrow-btn" id="backward_btn">Down</button></div>
             <div class="col"></div>
         </div>
     </div>

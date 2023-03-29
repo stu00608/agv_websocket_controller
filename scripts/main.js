@@ -1,11 +1,16 @@
+const JOYSTICK_SIZE=200;
+
 let xValue = 0;
 let zValue = 0;
+
+let max_linear_vel = 0.2;
+let max_angular_vel = 0.2;
 
 const leftJoystickOptions = {
     zone: document.getElementById('js-left'),
     mode: 'static',
     position: { left: '50%', bottom: '50%' },
-    size: 200,
+    size: JOYSTICK_SIZE,
     color: 'blue',
     restJoystick: true,
     restOpacity: 0.5,
@@ -16,7 +21,7 @@ const rightJoystickOptions = {
     zone: document.getElementById('js-right'),
     mode: 'static',
     position: { right: '50%', bottom: '50%' },
-    size: 200,
+    size: JOYSTICK_SIZE,
     color: 'red',
     restJoystick: true,
     restOpacity: 0.5,
@@ -44,12 +49,14 @@ function connectWebSocket() {
         $('#connect-btn').prop('disabled', true);
 
         leftJoystick.on('move', (event, data) => {
-            xValue = data.force * Math.cos(data.angle.radian);
+	    //xValue = data.force * Math.cos(data.angle.radian);
+	    xValue = -Math.sin(data.angle.radian) * max_linear_vel * data.distance / (JOYSTICK_SIZE / 2);
             sendJoystickData();
         });
 
         rightJoystick.on('move', (event, data) => {
-            zValue = data.force * Math.sin(data.angle.radian);
+            //zValue = data.force * Math.sin(data.angle.radian);
+	    zValue = Math.cos(data.angle.radian) * max_angular_vel * data.distance / (JOYSTICK_SIZE / 2);
             sendJoystickData();
         });
 
@@ -92,6 +99,7 @@ function sendJoystickData() {
         z: parseFloat(zValue.toFixed(2))
     };
     socket.send(JSON.stringify(message));
+    console.log(message.x, message.z);
 }
 
 function showJoysticks() {
@@ -120,6 +128,9 @@ $(document).ready(function () {
     // Update the label and value as the slider is dragged
     slider.on('input change', function () {
         var value = $(this).val();
+	max_linear_vel = value;
+	max_angular_vel = value;
+	
         currentValue.text(value);
         sliderLabel.text(value);
     });
@@ -149,6 +160,57 @@ $(document).ready(function () {
     $('#connect-btn').on('click', () => {
         connectWebSocket();
     });
+
+    $('#forward_btn').on('touchstart', () => {
+	xValue = -max_linear_vel;
+	zValue = 0;
+	sendJoystickData();
+    });
+    $('#forward_btn').on('touchend', () => {
+	xValue = 0;
+	zValue = 0;
+	sendJoystickData();
+    });
+
+    $('#backward_btn').on('touchstart', () => {
+	xValue = max_linear_vel;
+	zValue = 0;
+	sendJoystickData();
+    });
+    $('#backward_btn').on('touchend', () => {
+	xValue = 0;
+	zValue = 0;
+	sendJoystickData();
+    });
+
+    $('#left_btn').on('touchstart', () => {
+	xValue = 0;
+	zValue = -max_angular_vel;
+	sendJoystickData();
+    });
+    $('#left_btn').on('touchend', () => {
+	xValue = 0;
+	zValue = 0;
+	sendJoystickData();
+    });
+
+    $('#right_btn').on('touchstart', () => {
+	xValue = 0;
+	zValue = max_angular_vel;
+	sendJoystickData();
+    });
+    $('#right_btn').on('touchend', () => {
+	xValue = 0;
+	zValue = 0;
+	sendJoystickData();
+    });
+
+    $('#stop_btn').on('click', () => {
+	xValue = 0;
+	zValue = 0;
+	sendJoystickData();
+    });
+
 
     // Initialize with the joysticks tab active
     showJoysticks();
