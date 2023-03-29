@@ -1,47 +1,39 @@
-// const socket = new WebSocket('ws://192.168.4.1:666');
+const socket = new WebSocket('ws://192.168.4.1:666');
 
 let xValue = 0;
 let zValue = 0;
 
-// socket.onopen = () => {
-//     console.log('WebSocket connected');
+socket.onopen = () => {
+    console.log('WebSocket connected');
 
-//     leftJoystick.on('move', (event, data) => {
-//         xValue = data.force * Math.cos(data.angle.radian);
-//         sendJoystickData();
-//     });
+    leftJoystick.on('move', (event, data) => {
+        xValue = data.force * Math.cos(data.angle.radian);
+        sendJoystickData();
+    });
 
-//     rightJoystick.on('move', (event, data) => {
-//         zValue = data.force * Math.sin(data.angle.radian);
-//         sendJoystickData();
-//     });
+    rightJoystick.on('move', (event, data) => {
+        zValue = data.force * Math.sin(data.angle.radian);
+        sendJoystickData();
+    });
 
-//     leftJoystick.on('end', () => {
-//         xValue = 0;
-//         sendJoystickData();
-//     });
+    leftJoystick.on('end', () => {
+        xValue = 0;
+        sendJoystickData();
+    });
 
-//     rightJoystick.on('end', () => {
-//         zValue = 0;
-//         sendJoystickData();
-//     });
-// };
+    rightJoystick.on('end', () => {
+        zValue = 0;
+        sendJoystickData();
+    });
+};
 
-// function sendJoystickData() {
-//     const message = {
-//         x: parseFloat(xValue.toFixed(2)),
-//         z: parseFloat(zValue.toFixed(2))
-//     };
-//     socket.send(JSON.stringify(message));
-// }
-
-// function sendArrowData(x, z) {
-//     const message = {
-//         x: x,
-//         z: z
-//     };
-//     socket.send(JSON.stringify(message));
-// }
+function sendJoystickData() {
+    const message = {
+        x: parseFloat(xValue.toFixed(2)),
+        z: parseFloat(zValue.toFixed(2))
+    };
+    socket.send(JSON.stringify(message));
+}
 
 function showJoysticks() {
     $('.js-panel').css('opacity', 1);
