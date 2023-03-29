@@ -1,0 +1,14 @@
+[Unit]
+Description=Check hostapd and dnsmasq services and toggle GPIO
+After=network.target hostapd.service dnsmasq.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/pi/agv_websocket_controller
+ExecStart=/home/pi/agv_websocket_controller/check_services_gpio.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

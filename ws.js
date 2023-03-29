@@ -37,23 +37,23 @@ server.on('connection', function connection(socket) {
 });
 
 function map_value(value, fromLow, fromHigh, toLow, toHigh) {
-  return toLow + (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow);
+    return toLow + (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow);
 }
 
 function calc_velocity(x, z) {
 
     // Scale up the rotation speed if only rotating.
     if (x == 0) {
-        z = clamp(z*2.0, -1.0, 1.0);
+        z = clamp(z * 2.0, -1.0, 1.0);
         console.log(`z=${z}`);
-    } 
+    }
 
     let omega_left = ((x - (z * WIDTH) / 2.0) / WHEEL_RADIUS);
-    omega_left = Math.sign(omega_left)*map_value(Math.abs(omega_left), 0, MAX_VEL_VALUE, 0, 255.0);
+    omega_left = Math.sign(omega_left) * map_value(Math.abs(omega_left), 0, MAX_VEL_VALUE, 0, 255.0);
     omega_left = Math.floor(omega_left);
 
     let omega_right = ((x + (z * WIDTH) / 2.0) / WHEEL_RADIUS);
-    omega_right = Math.sign(omega_right)*map_value(Math.abs(omega_right), 0, MAX_VEL_VALUE, 0, 255.0);
+    omega_right = Math.sign(omega_right) * map_value(Math.abs(omega_right), 0, MAX_VEL_VALUE, 0, 255.0);
     omega_right = Math.floor(omega_right);
 
     return { omega_left, omega_right };
@@ -86,7 +86,7 @@ function motor_control(velocity) {
         right_break
     );
 
-    if(!DEBUG){
+    if (!DEBUG) {
         digitalWrite(LEFTDIRECTIONPIN, left_directionPin);
         analogWrite(LEFTSPEEDPIN, left_value);
         digitalWrite(LEFTBREAKPIN, left_break);
