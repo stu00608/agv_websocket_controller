@@ -16,7 +16,13 @@
 
         <nav class="navbar navbar-light">
             <div class="container-fluid">
-                <span class="navbar-brand mb-0 h1">Robot Controller</span>
+                <div style="margin: 0%;">
+                    <div class="online-indicator ws-disconnected">
+                        <span class="blink ws-disconnected" id="ws-indicator"></span>
+                    </div>
+                    <span class="navbar-brand mb-0 h1">Robot Controller</span>
+
+                </div>
                 <ul class="nav nav-pills">
                     <li class="nav-item">
                         <a class="nav-link active" id="joysticks-tab" href="#">Joysticks</a>
@@ -40,6 +46,7 @@
                 </div>
                 <span class="current-value">0.5</span>
             </div>
+            <button class="btn btn-primary" id="connect-btn">Connect</button>
         </div>
     </div>
 

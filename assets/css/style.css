@@ -198,3 +198,50 @@ body {
     color: #777;
     margin-left: 10px;
 }
+
+div.online-indicator {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin-right: 10px;
+
+    /* background-color: #0fcc45; */
+    border-radius: 50%;
+
+    position: relative;
+}
+
+span.blink {
+    display: block;
+    width: 15px;
+    height: 15px;
+
+    opacity: 0.7;
+    border-radius: 50%;
+
+    animation: blink 1s linear infinite;
+}
+
+div.ws-connected {
+    background-color: #0fcc45;
+}
+
+span.ws-connected {
+    background-color: #0fcc45;
+}
+
+div.ws-disconnected {
+    background-color: #e30f4b;
+}
+
+span.ws-disconnected {
+    background-color: #e30f4b;
+
+}
+
+@keyframes blink {
+    100% {
+        transform: scale(2, 2);
+        opacity: 0;
+    }
+}

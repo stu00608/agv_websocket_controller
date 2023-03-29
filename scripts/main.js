@@ -3,29 +3,76 @@ const socket = new WebSocket('ws://192.168.4.1:666');
 let xValue = 0;
 let zValue = 0;
 
-socket.onopen = () => {
-    console.log('WebSocket connected');
-
-    leftJoystick.on('move', (event, data) => {
-        xValue = data.force * Math.cos(data.angle.radian);
-        sendJoystickData();
-    });
-
-    rightJoystick.on('move', (event, data) => {
-        zValue = data.force * Math.sin(data.angle.radian);
-        sendJoystickData();
-    });
-
-    leftJoystick.on('end', () => {
-        xValue = 0;
-        sendJoystickData();
-    });
-
-    rightJoystick.on('end', () => {
-        zValue = 0;
-        sendJoystickData();
-    });
+const leftJoystickOptions = {
+    zone: document.getElementById('js-left'),
+    mode: 'static',
+    position: { left: '50%', bottom: '50%' },
+    size: 200,
+    color: 'blue',
+    restJoystick: true,
+    restOpacity: 0.5,
+    lockY: true
 };
+
+const rightJoystickOptions = {
+    zone: document.getElementById('js-right'),
+    mode: 'static',
+    position: { right: '50%', bottom: '50%' },
+    size: 200,
+    color: 'red',
+    restJoystick: true,
+    restOpacity: 0.5,
+    lockX: true
+};
+
+let leftJoystick = null;
+let rightJoystick = null;
+
+function connectWebSocket() {
+    const socket = new WebSocket('ws://192.168.4.1:666');
+
+    socket.onopen = () => {
+        // Update the indicator and button when connected
+        $('#ws-indicator').removeClass('ws-disconnected').addClass('ws-connected');
+        $('#online-indicator').removeClass('ws-disconnected').addClass('ws-connected');
+        $('#connect-btn').prop('disabled', true);
+
+        leftJoystick.on('move', (event, data) => {
+            xValue = data.force * Math.cos(data.angle.radian);
+            sendJoystickData();
+        });
+
+        rightJoystick.on('move', (event, data) => {
+            zValue = data.force * Math.sin(data.angle.radian);
+            sendJoystickData();
+        });
+
+        leftJoystick.on('end', () => {
+            xValue = 0;
+            sendJoystickData();
+        });
+
+        rightJoystick.on('end', () => {
+            zValue = 0;
+            sendJoystickData();
+        });
+
+    };
+
+    socket.onerror = () => {
+        // Update the indicator and button on error
+        $('#ws-indicator').removeClass('ws-connected').addClass('ws-disconnected');
+        $('#online-indicator').removeClass('ws-connected').addClass('ws-disconnected');
+        $('#connect-btn').prop('disabled', false);
+    };
+
+    socket.onclose = () => {
+        // Update the indicator and button on close
+        $('#ws-indicator').removeClass('ws-connected').addClass('ws-disconnected');
+        $('#online-indicator').removeClass('ws-connected').addClass('ws-disconnected');
+        $('#connect-btn').prop('disabled', false);
+    };
+}
 
 function sendJoystickData() {
     const message = {
@@ -65,30 +112,9 @@ $(document).ready(function () {
         sliderLabel.text(value);
     });
 
-    const leftJoystickOptions = {
-        zone: document.getElementById('js-left'),
-        mode: 'static',
-        position: { left: '50%', bottom: '50%' },
-        size: 200,
-        color: 'blue',
-        restJoystick: true,
-        restOpacity: 0.5,
-        lockY: true
-    };
 
-    const rightJoystickOptions = {
-        zone: document.getElementById('js-right'),
-        mode: 'static',
-        position: { right: '50%', bottom: '50%' },
-        size: 200,
-        color: 'red',
-        restJoystick: true,
-        restOpacity: 0.5,
-        lockX: true
-    };
-
-    const leftJoystick = nipplejs.create(leftJoystickOptions);
-    const rightJoystick = nipplejs.create(rightJoystickOptions);
+    leftJoystick = nipplejs.create(leftJoystickOptions);
+    rightJoystick = nipplejs.create(rightJoystickOptions);
 
 
     // Tab switching
@@ -106,6 +132,10 @@ $(document).ready(function () {
         $('.nav-link').removeClass('active');
         $(this).addClass('active');
         showArrowPanel();
+    });
+
+    $('#connect-btn').on('click', () => {
+        connectWebSocket();
     });
 
     // Initialize with the joysticks tab active
