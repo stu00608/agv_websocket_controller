@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 
 <head>
     <meta charset="UTF-8">
@@ -13,40 +13,62 @@
 </head>
 
 <body>
-    <div id="container">
-        <nav class="navbar navbar-light">
-            <div class="container-fluid">
-                <div style="margin: 0%;">
-                    <div class="ws-disconnected" id="online-indicator">
-                        <span class="blink ws-disconnected" id="ws-indicator"></span>
-                    </div>
-                    <span class="navbar-brand mb-0 h1">MovableBag+ Controller</span>
+    <div class="container-xl d-flex align-items-start justify-content-center">
+        <div style="margin-top: 5%; width: 60%;">
 
-                </div>
-                <ul class="nav nav-pills">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="joysticks-tab" href="#">Joysticks</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="arrow-tab" href="#">Arrow</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+            <nav class="navbar navbar-light">
+                <div class="container-fluid">
+                    <div style="margin: 0%;">
+                        <div class="ws-disconnected" id="online-indicator">
+                            <span class="blink ws-disconnected" id="ws-indicator"></span>
+                        </div>
+                        <span class="navbar-brand mb-0 h1">MovableBag+ Controller</span>
 
-        <div class="display-panel">
-            <div class="slider-container">
-                <div class="title">Max Velocity</div>
-                <div class="slider-wrapper">
-                    <input type="range" min="0" max="0.3" step="0.01" value="0.2" class="slider" id="velocity-slider">
-                    <div class="slider-values">
-                        <span class="min-value">0</span>
-                        <span class="max-value">0.3</span>
                     </div>
+                    <ul class="nav nav-pills">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="joysticks-tab" href="#">Joysticks</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="arrow-tab" href="#">Arrow</a>
+                        </li>
+                    </ul>
                 </div>
-                <span class="current-value">0.2</span>
+            </nav>
+
+            <div class="display-panel container-sm">
+                <div class="slider-container">
+                    <div class="title fw-bold">Max Velocity</div>
+                    <div class="slider-wrapper">
+                        <input type="range" min="0" max="0.3" step="0.01" value="0.2" class="slider"
+                            id="velocity-slider">
+                        <div class="slider-values">
+                            <span class="min-value">0</span>
+                            <span class="max-value">0.3</span>
+                        </div>
+                    </div>
+                    <span class="current-value">0.2</span>
+                </div>
+
+                <div class="row">
+                    <div class="col-4 text-center">
+                        <p class="text-center fw-bold">x</p>
+                    </div>
+                    <div class="col-8 text-center" id="x-value">---</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-4 text-center">
+                        <p class="text-center fw-bold">z</p>
+                    </div>
+                    <div class="col-8 text-center" id="z-value">---</div>
+                </div>
+
+                <div class="row d-flex align-items-start justify-content-center" style="margin-top: 20px;">
+                    <button class="btn btn-primary" style="width: 100px;" id="connect-btn">Connect</button>
+                </div>
             </div>
-            <button class="btn btn-primary" id="connect-btn">Connect</button>
+
         </div>
     </div>
 
@@ -76,6 +98,7 @@
     <script type="text/javascript" src="assets/lib/bootstrap.min.js"></script>
     <script type="text/javascript" src="assets/lib/nipplejs.js"></script>
     <script type="text/javascript" src="assets/lib/awesome_alert.var.js"></script>
+    <script type="text/javascript" src="assets/lib/sweetalert.min.js"></script>
     <script type="text/javascript" src="scripts/main.js"></script>
     <script type="text/javascript" src="scripts/utils.js"></script>
 </body>
