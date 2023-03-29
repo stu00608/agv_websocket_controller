@@ -26,6 +26,7 @@ def check_service(service_name):
 def restart_services():
     subprocess.run(["sudo", "systemctl", "restart", "hostapd"])
     subprocess.run(["sudo", "systemctl", "restart", "dnsmasq"])
+    print("Services restarted")
 
 
 def main():
