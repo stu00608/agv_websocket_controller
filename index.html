@@ -13,9 +13,16 @@
 </head>
 
 <body>
+    <div class="loading-container loading-off">
+        <!-- <div class="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div> -->
+    </div>
     <div class="container-xl d-flex align-items-start justify-content-center">
-        <div style="margin-top: 5%; width: 60%;">
-
+        <div class="panel-container">
             <nav class="navbar navbar-light">
                 <div class="container-fluid">
                     <div style="margin: 0%;">
@@ -32,43 +39,94 @@
                         <li class="nav-item">
                             <a class="nav-link" id="arrow-tab" href="#">Arrow</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="auto-tab" href="#">Auto</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
 
-            <div class="display-panel container-sm">
-                <div class="slider-container">
-                    <div class="title fw-bold">Max Velocity</div>
-                    <div class="slider-wrapper">
-                        <input type="range" min="0" max="0.3" step="0.01" value="0.2" class="slider"
-                            id="velocity-slider">
-                        <div class="slider-values">
-                            <span class="min-value">0</span>
-                            <span class="max-value">0.3</span>
+            <div class="container-sm">
+                <div class="manual-panel">
+                    <div class="slider-container">
+                        <div class="title fw-bold">Max Velocity</div>
+                        <div class="slider-wrapper">
+                            <input type="range" min="0" max="0.3" step="0.01" value="0.2" class="slider"
+                                id="velocity-slider">
+                            <div class="slider-values">
+                                <span class="min-value">0</span>
+                                <span class="max-value">0.3</span>
+                            </div>
+                        </div>
+                        <span class="current-value">0.2</span>
+                    </div>
+
+
+                </div>
+                <div class="auto-panel text-center">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3>Forward backward</h3>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="switch">
+                                <input type="checkbox" id="toggle1">
+                                <span class="switch-toggle"></span>
+                            </label>
                         </div>
                     </div>
-                    <span class="current-value">0.2</span>
-                </div>
-
-                <div class="row">
-                    <div class="col-4 text-center">
-                        <p class="text-center fw-bold">x</p>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3>Right turn</h3>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="switch">
+                                <input type="checkbox" id="toggle2">
+                                <span class="switch-toggle"></span>
+                            </label>
+                        </div>
                     </div>
-                    <div class="col-8 text-center" id="x-value">---</div>
-                </div>
-
-                <div class="row">
-                    <div class="col-4 text-center">
-                        <p class="text-center fw-bold">z</p>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3>Left turn</h3>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="switch">
+                                <input type="checkbox" id="toggle3">
+                                <span class="switch-toggle" id="toggle3span"></span>
+                            </label>
+                        </div>
                     </div>
-                    <div class="col-8 text-center" id="z-value">---</div>
-                </div>
+                    <div class="row" style="margin-top: 50px;">
+                        <div class="col value-selector">
+                            <button class="left-button text-center"></button>
+                            <span class="value-label"></span>
+                            <button class="right-button text-center"></button>
+                        </div>
+                    </div>
 
-                <div class="row d-flex align-items-start justify-content-center" style="margin-top: 20px;">
-                    <button class="btn btn-primary" style="width: 100px;" id="connect-btn">Connect</button>
                 </div>
             </div>
 
+        </div>
+        <div class="speed-monitor">
+            <div class="row">
+                <div class="col-6 text-center">
+                    <p class="text-center fw-bold">Linear</p>
+                </div>
+                <div class="col-6 text-center" id="x-value">---</div>
+            </div>
+
+            <div class="row">
+                <div class="col-6 text-center">
+                    <p class="text-center fw-bold">Angular</p>
+                </div>
+                <div class="col-6 text-center" id="z-value">---</div>
+            </div>
+
+            <div class="row align-items-start justify-content-center" style="margin-top: 20px;">
+                <button class="connect-button"></button>
+            </div>
         </div>
     </div>
 
@@ -94,10 +152,13 @@
         </div>
     </div>
 
+    <div class="container stop-panel">
+        <button class="btn btn-danger" id="auto-pause-btn">PAUSE</button>
+    </div>
+
     <script type="text/javascript" src="assets/lib/jquery.min.js"></script>
     <script type="text/javascript" src="assets/lib/bootstrap.min.js"></script>
     <script type="text/javascript" src="assets/lib/nipplejs.js"></script>
-    <script type="text/javascript" src="assets/lib/awesome_alert.var.js"></script>
     <script type="text/javascript" src="assets/lib/sweetalert.min.js"></script>
     <script type="text/javascript" src="scripts/main.js"></script>
 </body>

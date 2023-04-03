@@ -1,3 +1,10 @@
+:root {
+    --green: #1ECD97;
+    --blue: #2196F3;
+    --gray: #bbbbbb;
+    --red: #f44336;
+}
+
 html,
 body {
     touch-action: none;
@@ -41,8 +48,8 @@ body {
 .arrow-panel {
     position: absolute;
     margin: 20px;
-    bottom: 0;
-    right: 0;
+    bottom: 0%;
+    right: 0%;
     display: flex;
     flex-direction: column;
     width: auto;
@@ -71,6 +78,28 @@ body {
     justify-content: center;
 }
 
+.stop-panel {
+    position: absolute;
+    margin: 20px;
+    bottom: 0%;
+    right: 0%;
+    display: flex;
+    width: auto;
+    height: auto;
+    display: none;
+    opacity: 0.0;
+    transition: opacity 0.5s;
+}
+
+#auto-pause-btn {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    margin-right: 30px;
+    margin-bottom: 40px;
+    font-size: 30px;
+}
+
 .js-panel {
     position: absolute;
     width: 180px;
@@ -92,17 +121,37 @@ body {
     right: 0%;
 }
 
-/* Make items inside be horizontally and vertically centered */
-.display-panel {
+.manual-panel {
     padding: 50px;
     margin-top: 10%;
     border: 1px solid #ccc;
     border-radius: 20px;
+    opacity: 1.0;
+    transition: opacity 0.5s;
 }
 
-.display-panel p {
+.manual-panel p {
     display: inline-block;
     text-align: center;
+}
+
+.auto-panel {
+    padding: 50px;
+    margin-top: 10%;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    opacity: 1.0;
+    transition: opacity 0.5s;
+    display: none;
+}
+
+.auto-panel .row {
+    margin-bottom: 20px;
+}
+
+.panel-container {
+    margin-top: 5%;
+    width: 60%;
 }
 
 .slider-container {
@@ -114,6 +163,15 @@ body {
     margin: 0 auto;
     padding: 20px;
     box-sizing: border-box;
+}
+
+.speed-monitor {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40%;
+    font-size: 30px;
 }
 
 .title {
@@ -226,5 +284,247 @@ span.ws-disconnected {
     100% {
         transform: scale(2, 2);
         opacity: 0;
+    }
+}
+
+.loading-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.0);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-on {
+    display: flex;
+}
+
+.loading-off {
+    display: none;
+}
+
+.lds-ring {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border: 8px solid #fff;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #fff transparent transparent transparent;
+}
+
+.lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+}
+
+.lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+}
+
+.lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+}
+
+@keyframes lds-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* The switch - the box around the toggle */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The toggle */
+.switch-toggle {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 34px;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.switch-toggle:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.switch-toggle {
+    background-color: #2196F3;
+}
+
+input:focus+.switch-toggle {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.switch-toggle:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+.value-selector {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 50px;
+    box-sizing: border-box;
+}
+
+.value-selector button {
+    background-color: rgba(0, 0, 0, 0.0);
+    border: none;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    margin: 0;
+    font-size: 25px;
+}
+
+.value-selector button:focus {
+    outline: none;
+}
+
+.value-selector .value-label {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.value-selector .left-button:before {
+    content: '◄';
+}
+
+.value-selector .right-button:before {
+    content: '►';
+}
+
+.value-selector button:active {
+    animation: click-animation 0.2s;
+}
+
+@keyframes click-animation {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(0.8);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.connect-button {
+    outline: none;
+    height: 40px;
+    text-align: center;
+    width: 130px;
+    border-radius: 40px;
+    background: #fff;
+    border: 2px solid var(--blue);
+    color: var(--blue);
+    letter-spacing: 1px;
+    text-shadow: 0;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.connect-button:active {
+    letter-spacing: 2px;
+}
+
+.connect-button:after {
+    content: "CONNECT";
+}
+
+.onclic {
+    width: 40px;
+    border-color: var(--gray);
+    border-width: 3px;
+    font-size: 0;
+    border-left-color: var(--blue);
+    animation: rotating 2s 0.25s linear infinite;
+}
+
+.validate {
+    font-size: 13px;
+    color: white;
+    background: var(--green);
+    border-color: var(--green);
+}
+
+.validate:after {
+    font-family: 'FontAwesome';
+    content: "✓";
+}
+
+.connection-error {
+    font-size: 13px;
+    color: white;
+    background: var(--red);
+    border-color: var(--red);
+}
+
+.connection-error:after {
+    font-family: 'FontAwesome';
+    content: "✕";
+}
+
+@keyframes rotating {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
     }
 }

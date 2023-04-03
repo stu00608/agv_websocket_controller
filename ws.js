@@ -2,6 +2,7 @@ const WebSocket = require('ws');
 const { digitalWrite, analogWrite } = require('./gpio.js');
 
 const server = new WebSocket.Server({ port: 666, host: '0.0.0.0' });
+let connected = false;
 
 const DEBUG = false;
 
@@ -19,7 +20,13 @@ const MAX_VEL_VALUE = ((1.0 + (1.0 * WIDTH) / 2.0) / WHEEL_RADIUS);
 console.log(MAX_VEL_VALUE);
 
 server.on('connection', function connection(socket) {
+    if (connected) {
+        ws.send('Sorry, only one client is allowed at a time.');
+        ws.close();
+        return;
+    }
     console.log('A client connected');
+    connected = true;
 
     socket.on('message', function incoming(message) {
         message = message.toString();
