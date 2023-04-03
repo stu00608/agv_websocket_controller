@@ -65,8 +65,8 @@ let alertOption = {
 function connectWebSocket() {
     showLoadingMask();
 
-    // socket = new WebSocket('ws://192.168.4.1:666');
-    socket = new WebSocket('ws://localhost:8080');
+    socket = new WebSocket('ws://192.168.4.1:666');
+    // socket = new WebSocket('ws://localhost:8080');
 
     socket.onopen = () => {
         // Update the indicator and button when connected
