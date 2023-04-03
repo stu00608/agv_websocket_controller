@@ -22,7 +22,7 @@ node -v
 
 sudo apt-get install -y pigpio
 
-git clone https://github.com/stu00608/agv_websocket_controller.git && cd agv_websocket_controller
+git clone https://github.com/stu00608/agv_websocket_controller.git -b refactor && cd agv_websocket_controller
 npm install pigpio ws lite-server
 sudo node lib_test.js
 
