@@ -40,6 +40,7 @@ server.on('connection', function connection(socket) {
 
     socket.on('close', function close() {
         console.log('A client disconnected');
+        connected = false;
     });
 });
 

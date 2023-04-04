@@ -441,6 +441,7 @@ $(document).ready(function () {
                 }
             } else {
                 clearInterval(toggle.intervalId);
+                resetVelocity();
             }
         });
     });
@@ -449,24 +450,6 @@ $(document).ready(function () {
         $(".connect-button").addClass("onclic", 250);
         setTimeout(connectWebSocket, 500);
     });
-
-    // $(function () {
-    //     $(".connect-button").click(function () {
-    //         $(".connect-button").addClass("onclic", 250, validate);
-    //     });
-
-    //     function validate() {
-    //         setTimeout(function () {
-    //             $(".connect-button").removeClass("onclic");
-    //             $(".connect-button").addClass("validate", 450, callback);
-    //         }, 2250);
-    //     }
-    //     function callback() {
-    //         setTimeout(function () {
-    //             $(".connect-button").removeClass("validate");
-    //         }, 1250);
-    //     }
-    // });
 
     updateValue();
 
