@@ -322,7 +322,7 @@ function createToggle2Interval(interval) {
         if (pausing) {
             return;
         }
-        xValue = 0;
+        xValue = -max_linear_vel / 1.2;
         zValue = max_angular_vel;
         sendJoystickData();
     }
@@ -335,7 +335,7 @@ function createToggle3Interval(interval) {
         if (pausing) {
             return;
         }
-        xValue = 0;
+        xValue = -max_linear_vel / 1.2;
         zValue = -max_angular_vel;
         sendJoystickData();
     }
