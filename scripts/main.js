@@ -1,10 +1,10 @@
 const JOYSTICK_SIZE = 200;
 
-let xValue = 0;
 let zValue = 0;
+let xValue = 0;
 
-let max_linear_vel = 0.2;
-let max_angular_vel = 0.2;
+let max_angular_vel = 0.31;
+let max_linear_vel = 0.31;
 
 let pausing = false;
 
@@ -36,7 +36,7 @@ const leftJoystickOptions = {
     mode: 'static',
     position: { left: '50%', bottom: '50%' },
     size: JOYSTICK_SIZE,
-    color: 'blue',
+    color: '#FFC107',
     restJoystick: true,
     restOpacity: 0.5,
     lockY: true
@@ -72,17 +72,15 @@ function connectWebSocket() {
         // Update the indicator and button when connected
         $('#ws-indicator').removeClass('ws-disconnected').addClass('ws-connected');
         $('#online-indicator').removeClass('ws-disconnected').addClass('ws-connected');
-        // $('#connect-btn').prop('disabled', true);
 
         leftJoystick.on('move', (event, data) => {
-            xValue = -Math.sin(data.angle.radian) * max_linear_vel * data.distance / (JOYSTICK_SIZE / 2);
+            xValue = Math.sin(data.angle.radian) * max_angular_vel * data.distance / (JOYSTICK_SIZE / 2);
             xValue = parseFloat(xValue.toFixed(2));
             sendJoystickData();
         });
 
         rightJoystick.on('move', (event, data) => {
-            //zValue = data.force * Math.sin(data.angle.radian);
-            zValue = Math.cos(data.angle.radian) * max_angular_vel * data.distance / (JOYSTICK_SIZE / 2);
+            zValue = -Math.cos(data.angle.radian) * max_linear_vel * data.distance / (JOYSTICK_SIZE / 2);
             zValue = parseFloat(zValue.toFixed(2));
             sendJoystickData();
         });
@@ -98,61 +96,55 @@ function connectWebSocket() {
         });
 
         $('#forward_btn').on('touchstart', () => {
-            xValue = -max_linear_vel;
             zValue = 0;
+            xValue = max_linear_vel;
             sendJoystickData();
         });
         $('#forward_btn').on('touchend', () => {
-            xValue = 0;
             zValue = 0;
+            xValue = 0;
             sendJoystickData();
         });
 
         $('#backward_btn').on('touchstart', () => {
-            xValue = max_linear_vel;
             zValue = 0;
+            xValue = -max_linear_vel;
             sendJoystickData();
         });
         $('#backward_btn').on('touchend', () => {
-            xValue = 0;
             zValue = 0;
+            xValue = 0;
             sendJoystickData();
         });
 
         $('#left_btn').on('touchstart', () => {
+            zValue = max_angular_vel;
             xValue = 0;
-            zValue = -max_angular_vel;
             sendJoystickData();
         });
         $('#left_btn').on('touchend', () => {
-            xValue = 0;
-            zValue = 0;
-            sendJoystickData();
+            resetVelocity();
         });
 
         $('#right_btn').on('touchstart', () => {
+            zValue = -max_angular_vel;
             xValue = 0;
-            zValue = max_angular_vel;
-            sendJoystickData();
-        });
-        $('#right_btn').on('touchend', () => {
-            xValue = 0;
-            zValue = 0;
             sendJoystickData();
         });
 
+        $('#right_btn').on('touchend', () => {
+            resetVelocity();
+        });
+
         $('#stop_btn').on('click', () => {
-            xValue = 0;
-            zValue = 0;
-            sendJoystickData();
+            resetVelocity();
         });
 
         $('#auto-pause-btn').on('touchstart', () => {
             pausing = true;
-            xValue = 0;
-            zValue = 0;
-            sendJoystickData();
+            resetVelocity();
         });
+
         $('#auto-pause-btn').on('touchend', () => {
             pausing = false;
         });
@@ -228,8 +220,8 @@ function sendJoystickData() {
     // if socket exist, send the message
     if (socket) {
         const message = {
-            x: formatFloat(xValue),
-            z: formatFloat(zValue)
+            x: formatFloat(zValue),
+            z: formatFloat(xValue)
         };
         $("#x-value").text(message.x);
         $("#z-value").text(message.z);
@@ -241,8 +233,8 @@ function sendJoystickData() {
 function resetVelocity() {
     $("#x-value").text("0.0");
     $("#z-value").text("0.0");
-    xValue = 0;
     zValue = 0;
+    xValue = 0;
     sendJoystickData();
 }
 
@@ -305,9 +297,9 @@ function createToggle1Interval(interval) {
             return;
         }
         if (i % 2 == 0) {
-            xValue = -max_linear_vel;
+            xValue = -max_angular_vel;
         } else {
-            xValue = max_linear_vel;
+            xValue = max_angular_vel;
         }
         zValue = 0;
         sendJoystickData();
@@ -322,8 +314,8 @@ function createToggle2Interval(interval) {
         if (pausing) {
             return;
         }
-        xValue = -max_linear_vel / 1.2;
-        zValue = max_angular_vel;
+        xValue = -max_angular_vel / 1.2;
+        zValue = max_linear_vel;
         sendJoystickData();
     }
     toggle2Function();
@@ -335,8 +327,8 @@ function createToggle3Interval(interval) {
         if (pausing) {
             return;
         }
-        xValue = -max_linear_vel / 1.2;
-        zValue = -max_angular_vel;
+        xValue = -max_angular_vel / 1.2;
+        zValue = -max_linear_vel;
         sendJoystickData();
     }
     toggle3Function();
@@ -355,8 +347,8 @@ $(document).ready(function () {
     // Update the label and value as the slider is dragged
     slider.on('input change', function () {
         var value = $(this).val();
-        max_linear_vel = value;
         max_angular_vel = value;
+        max_linear_vel = value;
 
         currentValue.text(value);
         sliderLabel.text(value);
@@ -368,8 +360,6 @@ $(document).ready(function () {
 
 
     // Tab switching
-
-
     $('#joysticks-tab').on('click', function (e) {
         e.preventDefault();
         $('.nav-link').removeClass('active');

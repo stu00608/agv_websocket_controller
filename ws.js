@@ -62,7 +62,7 @@ function calc_velocity(x, z) {
 
     let omega_right = ((x + (z * WIDTH) / 2.0) / WHEEL_RADIUS);
     omega_right = Math.sign(omega_right) * map_value(Math.abs(omega_right), 0, MAX_VEL_VALUE, 0, 255.0);
-    omega_right = Math.floor(omega_right);
+    omega_right = -Math.floor(omega_right);
 
     return { omega_left, omega_right };
 }

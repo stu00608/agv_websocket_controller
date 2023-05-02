@@ -51,14 +51,14 @@
                     <div class="slider-container">
                         <div class="title fw-bold">Max Velocity</div>
                         <div class="slider-wrapper">
-                            <input type="range" min="0" max="0.3" step="0.01" value="0.2" class="slider"
+                            <input type="range" min="0.3" max="0.4" step="0.01" value="0.31" class="slider"
                                 id="velocity-slider">
                             <div class="slider-values">
-                                <span class="min-value">0</span>
-                                <span class="max-value">0.3</span>
+                                <span class="min-value">0.3</span>
+                                <span class="max-value">0.4</span>
                             </div>
                         </div>
-                        <span class="current-value">0.2</span>
+                        <span class="current-value">0.31</span>
                     </div>
 
 
@@ -112,14 +112,14 @@
         <div class="speed-monitor">
             <div class="row">
                 <div class="col-6 text-center">
-                    <p class="text-center fw-bold">Linear</p>
+                    <p class="text-center fw-bold">Angular</p>
                 </div>
                 <div class="col-6 text-center" id="x-value">---</div>
             </div>
 
             <div class="row">
                 <div class="col-6 text-center">
-                    <p class="text-center fw-bold">Angular</p>
+                    <p class="text-center fw-bold">Linear</p>
                 </div>
                 <div class="col-6 text-center" id="z-value">---</div>
             </div>
@@ -137,17 +137,17 @@
     <div class="container arrow-panel">
         <div class="row">
             <div class="col"></div>
-            <div class="col text-center"><button class="btn btn-primary arrow-btn" id="forward_btn">Up</button></div>
+            <div class="col text-center"><button class="btn btn-warning arrow-btn" id="forward_btn">Up</button></div>
             <div class="col"></div>
         </div>
         <div class="row">
-            <div class="col text-center"><button class="btn btn-primary arrow-btn" id="left_btn">Left</button></div>
-            <div class="col text-center"><button class="btn btn-danger arrow-btn" id="stop_btn">Stop</button></div>
-            <div class="col text-center"><button class="btn btn-primary arrow-btn" id="right_btn">Right</button></div>
+            <div class="col text-center"><button class="btn btn-danger arrow-btn" id="left_btn">Left</button></div>
+            <div class="col text-center"><button class="btn btn-dark arrow-btn" id="stop_btn">Stop</button></div>
+            <div class="col text-center"><button class="btn btn-danger arrow-btn" id="right_btn">Right</button></div>
         </div>
         <div class="row">
             <div class="col"></div>
-            <div class="col text-center"><button class="btn btn-primary arrow-btn" id="backward_btn">Down</button></div>
+            <div class="col text-center"><button class="btn btn-warning arrow-btn" id="backward_btn">Down</button></div>
             <div class="col"></div>
         </div>
     </div>
