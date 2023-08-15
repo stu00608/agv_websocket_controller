@@ -32,9 +32,16 @@ server.on('connection', function connection(socket) {
         message = message.toString();
         message = JSON.parse(message);
         console.log(message.x, message.z);
-        let vel = calc_velocity(message.x, message.z);
         if (message.control_mode != 2) {
-            motor_control(vel);
+            if (message.x == 0 && message.z == 0){
+                let vel = { omega_left: 0.0, omega_right: 0.0};
+                motor_control(vel, true);
+            }
+            else
+            {
+                let vel = calc_velocity(message.x, message.z);
+                motor_control(vel);
+            }
         }
     });
 
@@ -71,13 +78,13 @@ function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
 }
 
-function motor_control(velocity) {
+function motor_control(velocity, is_break=false) {
     let left_directionPin = +(velocity.omega_left < 0);
-    let left_value = Math.abs(velocity.omega_left);
+    let left_value = (is_break)? 255.0:Math.abs(velocity.omega_left);
     let left_break = +(velocity.omega_left != 0);
 
     let right_directionPin = +(velocity.omega_right < 0);
-    let right_value = Math.abs(velocity.omega_right);
+    let right_value = (is_break)? 255.0:Math.abs(velocity.omega_right);
     let right_break = +(velocity.omega_right != 0);
 
     console.log(
