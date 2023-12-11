@@ -17,7 +17,7 @@ sudo apt-get update -y && sudo apt-get upgrade -y && sudo apt-get install git vi
 
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
 echo 'deb https://deb.nodesource.com/node_16.x buster main' | sudo tee /etc/apt/sources.list.d/nodesource.list
-sudo apt-get update -y && sudo apt-get install -y nodejs
+sudo apt-get update -y && sudo apt-get install -y nodejs npm
 node -v
 
 sudo apt-get install -y pigpio
